@@ -15,7 +15,7 @@ defmodule Fxnk.MixProject do
       homepage_url: "http://matthewsecrist.dev/fxnk",
       docs: [
         main: "Fxnk",
-        logo: "logo.png",
+        logo: "fx.png",
         extras: ["README.md"]
       ]
     ]
