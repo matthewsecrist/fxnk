@@ -1,5 +1,6 @@
 defmodule PipeTest do
   use ExUnit.Case
+  doctest Fxnk.Pipe
   import Fxnk.Pipe
 
   test "curried pipe works with a list" do

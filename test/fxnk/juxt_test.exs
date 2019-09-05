@@ -1,5 +1,6 @@
 defmodule JuxtTest do
   use ExUnit.Case
+  doctest Fxnk.Juxt
   import Fxnk.Juxt
   import Fxnk.Math
 

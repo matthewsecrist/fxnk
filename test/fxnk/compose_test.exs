@@ -1,5 +1,6 @@
 defmodule ComposeTest do
   use ExUnit.Case
+  doctest Fxnk.Compose
   import Fxnk.Compose
 
   test "curried compose works with a list" do

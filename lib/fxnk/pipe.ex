@@ -13,7 +13,6 @@ defmodule Fxnk.Pipe do
       iex> import Fxnk.Pipe
       Fxnk.Pipe
       iex> reverseSort = pipe([&Enum.sort/1, &Enum.reverse/1])
-      #Function<0.93910723/1 in Fxnk.Curry.curry/3>
       iex> reverseSort.([1,3,5,7,6,4,2])
       [7, 6, 5, 4, 3, 2, 1]
   """

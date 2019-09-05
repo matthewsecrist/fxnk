@@ -14,7 +14,6 @@ defmodule Fxnk.Compose do
       iex> import Fxnk.Compose
       Fxnk.Compose
       iex> reverseSort = compose([&Enum.reverse/1, &Enum.sort/1])
-      #Function<0.93910723/1 in Fxnk.Curry.curry/3>
       iex> reverseSort.([1,3,5,7,6,4,2])
       [7, 6, 5, 4, 3, 2, 1]
 

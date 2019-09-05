@@ -100,7 +100,7 @@ defmodule Fxnk.Math do
   divide(a, b) == a / b
 
   ## Examples
-    iex(1)> recip = Fxnk.Math.divide(1, 4)
+    iex(1)> Fxnk.Math.divide(1, 4)
     0.25
   """
   @spec divide(number, number) :: float
@@ -165,6 +165,16 @@ defmodule Fxnk.Math do
   defp avg([hd | []], n, len), do: (hd + n) / inc(len)
   defp avg([hd | tl], n, len), do: avg(tl, hd + n, inc(len))
 
+  @spec negate(number) :: number
+  @doc """
+  Multiply a number times -1.
+
+  ## Examples
+    iex> Fxnk.Math.negate(100)
+    -100
+    iex> Fxnk.Math.negate(-100)
+    100
+  """
   def negate(n) do
     n * -1
   end
