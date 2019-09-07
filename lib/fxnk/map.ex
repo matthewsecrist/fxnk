@@ -1,11 +1,5 @@
-defmodule Fxnk.Pick do
-  import Fxnk.Curry
-
-  @moduledoc """
-  Documentation for `Fxnk.Pick`
-
-  Pick properties off of a map.
-  """
+defmodule Fxnk.Map do
+  import Fxnk.Functions, only: [curry: 1]
 
   @doc """
   `pick/1`
@@ -13,7 +7,7 @@ defmodule Fxnk.Pick do
   Accepts a list of args, returns a curried `pick/2`.
 
   ## Examples
-      iex> pickArgs = Fxnk.Pick.pick([:red, :blue])
+      iex> pickArgs = Fxnk.Map.pick([:red, :blue])
       iex> pickArgs.(%{ red: "RED", green: "GREEN", blue: "BLUE", yellow: "YELLOW" })
       %{red: "RED", blue: "BLUE"}
   """
@@ -26,7 +20,7 @@ defmodule Fxnk.Pick do
   `pick/2` takes a `Map` and a `List` of atoms, and returns a map of only the selected keys.
 
   ## Examples
-      iex> Fxnk.Pick.pick(%{ red: "RED", green: "GREEN", blue: "BLUE", yellow: "YELLOW" }, [:red, :blue])
+      iex> Fxnk.Map.pick(%{ red: "RED", green: "GREEN", blue: "BLUE", yellow: "YELLOW" }, [:red, :blue])
       %{red: "RED", blue: "BLUE"}
   """
   @spec pick(map, [atom(), ...]) :: map
