@@ -1,4 +1,7 @@
 defmodule Fxnk.List do
+  @moduledoc """
+  `Fxnk.List` are functions for working with lists.
+  """
   @doc """
   `reduce_right/3` takes a list of args, an initial value and a function and returns a single value.
 

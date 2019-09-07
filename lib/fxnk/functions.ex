@@ -1,4 +1,7 @@
 defmodule Fxnk.Functions do
+  @moduledoc """
+  `Fxnk.Functions` are functions for computation or helpers.
+  """
   @doc """
   `curry/1` takes a function and returns a function.
 

@@ -1,4 +1,7 @@
 defmodule Fxnk.Flow do
+  @moduledoc """
+  `Fxnk.Flow` functions are used for control flow.
+  """
   import Fxnk.Functions, only: [curry: 1]
   import Fxnk.List, only: [reduce_right: 3]
 
@@ -50,5 +53,44 @@ defmodule Fxnk.Flow do
   @spec pipe(any, [function(), ...]) :: any
   def pipe(arg, fns) when is_list(fns) do
     Enum.reduce(fns, arg, fn f, acc -> f.(acc) end)
+  end
+
+  @spec unless_is(function(), function()) :: fun
+  def unless_is(pred, func) do
+    curry(fn input -> unless_is(input, pred, func) end)
+  end
+
+  @spec unless_is(any, function(), function()) :: any
+  def unless_is(input, pred, func) do
+    case pred.(input) do
+      true -> input
+      _ -> func.(input)
+    end
+  end
+
+  @spec until(function(), function()) :: fun
+  def until(pred, func) do
+    curry(fn init -> until(init, pred, func) end)
+  end
+
+  @spec until(any, function(), function()) :: any
+  def until(init, pred, func) do
+    case pred.(init) do
+      false -> until(func.(init), pred, func)
+      _ -> init
+    end
+  end
+
+  @spec when_is(function(), function()) :: fun
+  def when_is(pred, func) do
+    curry(fn input -> when_is(input, pred, func) end)
+  end
+
+  @spec when_is(any, function(), function()) :: any
+  def when_is(input, pred, func) do
+    case pred.(input) do
+      true -> func.(input)
+      _ -> input
+    end
   end
 end

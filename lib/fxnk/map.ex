@@ -1,4 +1,7 @@
 defmodule Fxnk.Map do
+  @moduledoc """
+  `Fxnk.Map` are functions that work with maps.
+  """
   import Fxnk.Functions, only: [curry: 1]
 
   @doc """
