@@ -1,5 +1,5 @@
 defmodule Fxnk.Math do
-  import Fxnk.Curry
+  import Fxnk.Functions, only: [curry: 1]
 
   @moduledoc """
   Mathy stuff.
@@ -59,7 +59,6 @@ defmodule Fxnk.Math do
 
   ## Example
       iex> addOne = Fxnk.Math.add(1)
-      #Function<0.88898665/1 in Fxnk.Curry.curry/3>
       iex> addOne.(2)
       3
   """
@@ -85,7 +84,6 @@ defmodule Fxnk.Math do
 
   ## Examples
       iex> minusOne = Fxnk.Math.subtract(1)
-      #Function<0.88898665/1 in Fxnk.Curry.curry/3>
       iex> minusOne.(5)
       4
   """
@@ -113,7 +111,6 @@ defmodule Fxnk.Math do
 
   ## Examples
       iex> recip = Fxnk.Math.divide(1)
-      #Function<0.88898665/1 in Fxnk.Curry.curry/3>
       iex> recip.(4)
       0.25
   """
@@ -141,7 +138,6 @@ defmodule Fxnk.Math do
 
   ## Examples
       iex> timesTen = Fxnk.Math.multiply(10)
-      #Function<0.88898665/1 in Fxnk.Curry.curry/3>
       iex> timesTen.(10)
       100
   """

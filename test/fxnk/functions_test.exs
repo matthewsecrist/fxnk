@@ -1,7 +1,7 @@
-defmodule JuxtTest do
+defmodule Fxnk.FunctionsTest do
   use ExUnit.Case
-  doctest Fxnk.Juxt
-  import Fxnk.Juxt
+  doctest Fxnk.Functions
+  import Fxnk.Functions
   import Fxnk.Math
 
   test "curried juxt works with a list" do
