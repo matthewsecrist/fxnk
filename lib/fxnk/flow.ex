@@ -32,6 +32,39 @@ defmodule Fxnk.Flow do
   end
 
   @doc """
+  Curried `if_else/3`
+
+  ## Examples
+      iex> multTwoIfLessThanTenOrDivideByTwo = Fxnk.Flow.if_else(fn x -> x < 10 end, fn x -> x * 2 end, fn x -> div(x, 2) end)
+      iex> multTwoIfLessThanTenOrDivideByTwo.(5)
+      10
+      iex> multTwoIfLessThanTenOrDivideByTwo.(20)
+      10
+  """
+  @spec if_else(function(), function(), function()) :: fun
+  def if_else(pred, passFunc, failFunc) do
+    curry(fn input -> if_else(input, pred, passFunc, failFunc) end)
+  end
+
+  @doc """
+  `if_else/4` takes an input, a predicate, a pass function and a fail function.
+  Runs the pass function if the predicate returns true when passed the input, otherwise runs the fail function.
+
+  ## Examples
+      iex> Fxnk.Flow.if_else(5, fn x -> x < 10 end, fn x -> x * 2 end, fn x -> div(x, 2) end)
+      10
+      iex> Fxnk.Flow.if_else(20, fn x -> x < 10 end, fn x -> x * 2 end, fn x -> div(x, 2) end)
+      10
+  """
+  @spec if_else(any, function(), function(), function()) :: any
+  def if_else(input, pred, passFunc, failFunc) do
+    case pred.(input) do
+      true -> passFunc.(input)
+      _ -> failFunc.(input)
+    end
+  end
+
+  @doc """
   Curried `pipe/2`.
 
   ## Examples
