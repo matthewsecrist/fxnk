@@ -6,7 +6,7 @@ defmodule Fxnk.Flow do
   import Fxnk.List, only: [reduce_right: 3]
 
   @doc """
-  `compose/1` returns a curried `Compose`
+  Curried `compose/2`.
 
   ## Examples
       iex> reverseSort = Fxnk.Flow.compose([&Enum.reverse/1, &Enum.sort/1])
@@ -19,7 +19,8 @@ defmodule Fxnk.Flow do
   end
 
   @doc """
-  `compose/2` is a pipeable `Compose`.
+  `compose/2` takes an input and a list of functions and runs the functions against the input
+  from right to left.
 
   ## Examples
       iex> [1,3,5,7,6,4,2] |> Fxnk.Flow.compose([&Enum.reverse/1, &Enum.sort/1])
@@ -31,7 +32,7 @@ defmodule Fxnk.Flow do
   end
 
   @doc """
-  `pipe/1` returns a curried `Pipe`
+  Curried `pipe/2`.
 
   ## Examples
       iex> reverseSort = Fxnk.Flow.pipe([&Enum.sort/1, &Enum.reverse/1])
@@ -44,7 +45,8 @@ defmodule Fxnk.Flow do
   end
 
   @doc """
-  `pipe/2` is a pipeable `Pipe`
+  `pipe/2` takes an input and a list of functions and runs the functions against the input
+  from left to right.
 
   ## Examples
       iex> [1,3,5,7,6,4,2] |> Fxnk.Flow.pipe([&Enum.sort/1, &Enum.reverse/1])
@@ -56,7 +58,7 @@ defmodule Fxnk.Flow do
   end
 
   @doc """
-  Curried `unless_is/3`
+  Curried `unless_is/3`.
   """
   @spec unless_is(function(), function()) :: fun
   def unless_is(pred, func) do
@@ -82,7 +84,7 @@ defmodule Fxnk.Flow do
   end
 
   @doc """
-  Curried `until/3`
+  Curried `until/3`.
 
   ## Examples
       iex> timesTwoUntilGreaterThan100 = Fxnk.Flow.until(fn x -> x > 100 end, fn n -> n * 2 end)
@@ -111,7 +113,7 @@ defmodule Fxnk.Flow do
   end
 
   @doc """
-  Curried `when_is/3`
+  Curried `when_is/3`.
 
   ## Examples
       iex> timesTwoWhenGreaterThan10 = Fxnk.Flow.when_is(fn x -> x > 10 end, fn n -> n * 2 end)
