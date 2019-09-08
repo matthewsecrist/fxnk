@@ -207,4 +207,34 @@ defmodule Fxnk.Logic do
   def or?(true, _), do: true
   def or?(_, true), do: true
   def or?(_, _), do: false
+
+  @doc """
+  Curried greater than function, returns a function that returns true if the second number passed in is greater than the first.
+
+  ## Examples
+    iex> greaterThan5? = Fxnk.Logic.gt?(5)
+    iex> greaterThan5?.(19)
+    true
+    iex> greaterThan5?.(3)
+    false
+  """
+  @spec gt?(number) :: fun
+  def gt?(x) do
+    curry(fn y -> x < y end)
+  end
+
+  @doc """
+  Curried less than function, returns a function that returns true if the second number passed in is less than the first.
+
+  ## Examples
+    iex> lessThan5? = Fxnk.Logic.lt?(5)
+    iex> lessThan5?.(19)
+    false
+    iex> lessThan5?.(3)
+    true
+  """
+  @spec lt?(number) :: fun
+  def lt?(x) do
+    curry(fn y -> x > y end)
+  end
 end
