@@ -1,9 +1,8 @@
 defmodule Fxnk.Math do
-  import Fxnk.Functions, only: [curry: 1]
-
   @moduledoc """
-  Mathy stuff.
+  `Fxnk.Math` are functions dealing with math.
   """
+  import Fxnk.Functions, only: [curry: 1]
 
   @doc """
   Find the maximum of a list.

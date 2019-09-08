@@ -1,4 +1,7 @@
 defmodule Fxnk.Functions do
+  @moduledoc """
+  `Fxnk.Functions` are functions for computation or helpers.
+  """
   @doc """
   `curry/1` takes a function and returns a function.
 
@@ -32,6 +35,7 @@ defmodule Fxnk.Functions do
       iex> minmax.([1,3,5,7])
       [1, 7]
   """
+  @spec juxt([function(), ...]) :: function()
   def juxt(fns) when is_list(fns) do
     curry(fn arg -> juxt(arg, fns) end)
   end
@@ -43,6 +47,7 @@ defmodule Fxnk.Functions do
       iex> Fxnk.Functions.juxt([1,3,5,7], [&Fxnk.Math.min/1, &Fxnk.Math.max/1])
       [1, 7]
   """
+  @spec juxt(any, [function(), ...]) :: any
   def juxt(arg, fns) do
     perform_juxt(arg, fns, [])
   end
