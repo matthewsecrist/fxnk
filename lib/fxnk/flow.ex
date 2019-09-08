@@ -92,6 +92,13 @@ defmodule Fxnk.Flow do
 
   @doc """
   Curried `unless_is/3`.
+
+  ## Examples
+      iex> multiplyByTwoUnlessGreaterThan10 = Fxnk.Flow.unless_is(fn n -> n > 10 end, fn x -> x * 2 end)
+      iex> multiplyByTwoUnlessGreaterThan10.(15)
+      15
+      iex> multiplyByTwoUnlessGreaterThan10.(2)
+      4
   """
   @spec unless_is(function(), function()) :: fun
   def unless_is(pred, func) do

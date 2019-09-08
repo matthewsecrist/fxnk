@@ -10,7 +10,7 @@ defmodule Fxnk.Map do
   Accepts a list of args, returns a curried `pick/2`.
 
   ## Examples
-      iex> pickArgs = Fxnk.Map.pick([:red, :blue])
+      iex> pickArgs = Fxnk.Map.pick([:red, :blue, :orange])
       iex> pickArgs.(%{ red: "RED", green: "GREEN", blue: "BLUE", yellow: "YELLOW" })
       %{red: "RED", blue: "BLUE"}
   """
@@ -20,19 +20,22 @@ defmodule Fxnk.Map do
   end
 
   @doc """
-  `pick/2` takes a `Map` and a `List` of atoms, and returns a map of only the selected keys.
+  `pick/2` takes a `Map` and a `List` of atoms, and returns a map of only the selected keys that exist. It will
+  return an empty map if passed an empty map or an empty list.
 
   ## Examples
-      iex> Fxnk.Map.pick(%{ red: "RED", green: "GREEN", blue: "BLUE", yellow: "YELLOW" }, [:red, :blue])
+      iex> Fxnk.Map.pick(%{ red: "RED", green: "GREEN", blue: "BLUE", yellow: "YELLOW" }, [:red, :blue, :orange])
       %{red: "RED", blue: "BLUE"}
   """
   @spec pick(map, [atom(), ...]) :: map
+  def pick(map, _) when map_size(map) == 0, do: %{}
+  def pick(_, []), do: %{}
+
   def pick(map, args) when is_map(map) and is_list(args) do
     do_pick(map, args, %{})
   end
 
   defp do_pick(_, [], acc), do: acc
-  defp do_pick(map, _, _) when map_size(map) == 0, do: %{}
 
   defp do_pick(map, [hd | tl], acc) do
     case Map.fetch(map, hd) do
