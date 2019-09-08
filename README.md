@@ -48,5 +48,3 @@ You also don't need to predefine the functions to use them.
   iex> multiplyByTwoIfBetween5and10.(8)
   16
 ```
-
-"""
