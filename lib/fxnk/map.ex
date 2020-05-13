@@ -18,6 +18,7 @@ defmodule Fxnk.Map do
       iex> getProp2.(%{foo: "foo", bar: "bar"})
       "foo"
   """
+  @spec prop(atom() | binary()) :: function()
   def prop(key) do
     curry(fn map -> prop(map, key) end)
   end
@@ -33,6 +34,7 @@ defmodule Fxnk.Map do
       iex> Fxnk.Map.prop(%{foo: "foo", bar: "bar"}, :foo)
       "foo"
   """
+  @spec prop(map(), atom() | binary()) :: any()
   def prop(map, key) when is_map(map) do
     map[key]
   end
@@ -51,6 +53,7 @@ defmodule Fxnk.Map do
       iex> getProps2.(%{foo: "foo", bar: "bar", baz: "baz"})
       ["foo", "bar"]
   """
+  @spec props([atom() | binary(), ...]) :: function()
   def props(keys) when is_list(keys) do
     curry(fn map -> props(map, keys) end)
   end
@@ -66,6 +69,7 @@ defmodule Fxnk.Map do
       iex> Fxnk.Map.props(%{foo: "foo", bar: "bar", baz: "baz"}, [:foo, :bar])
       ["foo", "bar"]
   """
+  @spec props(map(), [atom() | binary(), ...]) :: [any(), ...]
   def props(map, keys) when is_list(keys) and is_map(map) do
     for key <- keys, do: prop(map, key)
   end

@@ -11,6 +11,7 @@ defmodule Fxnk.Functions do
       iex> fourtyTwo.("hello")
       42
   """
+  @spec always(any()) :: function()
   def always(val), do: curry(fn _ -> val end)
 
   @doc """
@@ -20,6 +21,7 @@ defmodule Fxnk.Functions do
       iex> Fxnk.Functions.always("hello", 42)
       42
   """
+  @spec always(any(), any()) :: any()
   def always(_, val), do: val
 
   @doc """
@@ -69,12 +71,13 @@ defmodule Fxnk.Functions do
   """
   @spec juxt(any, [function(), ...]) :: any
   def juxt(arg, fns) do
-    perform_juxt(arg, fns, [])
+    for func <- fns, do: func.(arg)
   end
 
   @doc """
   `tap/1` takes a function and returns a function that takes a value. Applies the value to the function and then returns the value.
   """
+  @spec tap(function()) :: function()
   def tap(func) do
     curry(fn val -> tap(val, func) end)
   end
@@ -82,12 +85,9 @@ defmodule Fxnk.Functions do
   @doc """
   `tap/2` takes a value and a function, applies the value to the function and returns the value.
   """
-
+  @spec tap(any(), function()) :: function()
   def tap(val, func) do
     func.(val)
     val
   end
-
-  defp perform_juxt(arg, [hd | []], results), do: [hd.(arg) | results] |> Enum.reverse()
-  defp perform_juxt(arg, [hd | tl], results), do: perform_juxt(arg, tl, [hd.(arg) | results])
 end
