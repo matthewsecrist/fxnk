@@ -52,7 +52,7 @@ defmodule Fxnk.MixProject do
       name: "fxnk",
       # These are the default files included in the package
       files: ~w(lib .formatter.exs mix.exs README* LICENSE*),
-      licenses: ["Apache-2.0"],
+      licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/matthewsecrist/fxnk"}
     ]
   end
