@@ -237,4 +237,30 @@ defmodule Fxnk.Logic do
   def lt?(x) do
     curry(fn y -> x > y end)
   end
+
+  @doc """
+  Checks if a value is equal to `nil`.
+
+  ## Examples
+      iex> Fxnk.Logic.nil?(nil)
+      true
+      iex> Fxnk.Logic.nil?("not nil")
+      false
+  """
+  @spec nil?(any()) :: boolean()
+  def nil?(x) do
+    x === nil
+  end
+
+  @doc """
+    ## Examples
+      iex> Fxnk.Logic.not_nil?(nil)
+      false
+      iex> Fxnk.Logic.not_nil?("not nil")
+      true
+  """
+  @spec not_nil?(any()) :: boolean()
+  def not_nil?(x) do
+    x !== nil
+  end
 end
