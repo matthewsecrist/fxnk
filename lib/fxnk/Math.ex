@@ -197,4 +197,39 @@ defmodule Fxnk.Math do
   def dec(n) when is_integer(n) do
     n - 1
   end
+
+  @doc """
+  Curried `clamp/3`. Restrict a number to be between a range of numbers.
+
+  ### Example
+      iex> between1And10 = Fxnk.Math.clamp(1, 10)
+      iex> between1And10.(-5)
+      1
+      iex> between1And10.(15)
+      10
+  """
+  @spec clamp(integer(), integer()) :: fun
+  def clamp(from, to) do
+    curry(fn n -> clamp(n, from, to) end)
+  end
+
+  @doc """
+  Restrict a number to be between a range of numbers.
+
+  ### Example
+      iex> Fxnk.Math.clamp(13, 15, 20)
+      15
+      iex> Fxnk.Math.clamp(21, 15, 20)
+      20
+      iex> Fxnk.Math.clamp(17, 15, 20)
+      17
+  """
+  @spec clamp(integer(), integer(), integer()) :: integer()
+  def clamp(n, from, to) do
+    cond do
+      n <= from -> from
+      n >= to -> to
+      true -> n
+    end
+  end
 end
