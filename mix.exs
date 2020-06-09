@@ -4,7 +4,7 @@ defmodule Fxnk.MixProject do
   def project do
     [
       app: :fxnk,
-      version: "0.1.0",
+      version: "0.1.1",
       elixir: "~> 1.10",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
@@ -52,7 +52,7 @@ defmodule Fxnk.MixProject do
       name: "fxnk",
       # These are the default files included in the package
       files: ~w(lib .formatter.exs mix.exs README* LICENSE*),
-      licenses: ["Apache-2.0"],
+      licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/matthewsecrist/fxnk"}
     ]
   end
