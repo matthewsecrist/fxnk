@@ -50,6 +50,81 @@ defmodule Fxnk.Functions do
   end
 
   @doc """
+  Curried `converge/3`
+
+  ## Example
+    iex> reverseUpcaseConcat = Fxnk.Functions.converge(&Fxnk.String.concat/2, [&String.reverse/1, &String.upcase/1])
+    iex> reverseUpcaseConcat.("hello")
+    "ollehHELLO"
+  """
+  @spec converge(function(), [function(), ...]) :: function()
+  def converge(to_fn, fns) do
+    curry(fn args -> converge(args, to_fn, fns) end)
+  end
+
+  @doc """
+  `converge/3` takes an initial argument, a function and a list of functions. It applies the argument to each of the list of functions
+  and then applies the results of those functions as the argument to the end function.
+
+  The end function must have the same arity as the length of the list of functions.
+
+  ## Example
+      iex> Fxnk.Functions.converge("hello", &Fxnk.String.concat/2, [&String.reverse/1, &String.upcase/1])
+      "ollehHELLO"
+  """
+  @spec converge(any(), function(), [function(), ...]) :: any()
+  def converge(args, to_fn, fns) do
+    results = for function <- fns, do: function.(args)
+
+    apply(to_fn, results)
+  end
+
+  @doc """
+  A function that always returns false.
+  """
+  @spec falsy :: false
+  def falsy do
+    false
+  end
+
+  @doc """
+  Takes a function, returns a function that takes the same args as the initial function, but flips the order of the arguments.
+
+  ## Example
+      iex> flippedConcatString = Fxnk.Functions.flip(&Fxnk.String.concat/2)
+      iex> Fxnk.String.concat("hello", "world")
+      "helloworld"
+      iex> flippedConcatString.("hello", "world")
+      "worldhello"
+  """
+  def flip(func) do
+    fn arg1, arg2 -> func.(arg2, arg1) end
+  end
+
+  @doc """
+  Same as `flip/1`, but takes the arguments at the same time as the function.
+
+  ## Example
+      iex> Fxnk.Functions.flip("hello", "world", &Fxnk.String.concat/2)
+      "worldhello"
+  """
+  def flip(arg1, arg2, func) do
+    flip(func).(arg1, arg2)
+  end
+
+  @doc """
+  `identity/1` returns what was passed to it.
+
+  ## Example
+      iex> Fxnk.Functions.identity(42)
+      42
+  """
+  @spec identity(any()) :: any()
+  def identity(arg) do
+    arg
+  end
+
+  @doc """
   `juxt/1` takes list of functions and returns a curried juxt.
 
   ## Example
@@ -75,7 +150,24 @@ defmodule Fxnk.Functions do
   end
 
   @doc """
+  Function that always returns true.
+
+  ## Example
+      iex> Fxnk.Functions.truthy()
+      true
+  """
+  @spec truthy :: true
+  def truthy do
+    true
+  end
+
+  @doc """
   `tap/1` takes a function and returns a function that takes a value. Applies the value to the function and then returns the value.
+
+  ## Example
+      iex> function = Fxnk.Functions.tap(&Fxnk.Math.inc/1)
+      iex> function.(42)
+      42
   """
   @spec tap(function()) :: function()
   def tap(func) do
@@ -84,6 +176,10 @@ defmodule Fxnk.Functions do
 
   @doc """
   `tap/2` takes a value and a function, applies the value to the function and returns the value.
+
+  ## Example
+      iex> Fxnk.Functions.tap(42, &Fxnk.Math.inc/1)
+      42
   """
   @spec tap(any(), function()) :: function()
   def tap(val, func) do
