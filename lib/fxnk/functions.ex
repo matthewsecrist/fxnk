@@ -97,6 +97,7 @@ defmodule Fxnk.Functions do
       iex> flippedConcatString.("hello", "world")
       "worldhello"
   """
+  @spec flip(function()) :: (any(), any() -> any())
   def flip(func) do
     fn arg1, arg2 -> func.(arg2, arg1) end
   end
@@ -108,6 +109,7 @@ defmodule Fxnk.Functions do
       iex> Fxnk.Functions.flip("hello", "world", &Fxnk.String.concat/2)
       "worldhello"
   """
+  @spec flip(any(), any(), function()) :: any()
   def flip(arg1, arg2, func) do
     flip(func).(arg1, arg2)
   end
