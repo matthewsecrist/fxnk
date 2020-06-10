@@ -10,33 +10,32 @@ jobs:
       - checkout
       - run: mix local.hex --force
       - run: mix local.rebar --force
-      - run: mix do deps.get, deps.compile
-      - restore_cache:
-          keys:
-            - v1-plt-cache-{{ checksum "mix.lock" }}
-            - v1-plt-cache
-      - run: mix dialyzer --plt
-      - save_cache:
-          key: v1-plt-cache-{{ checksum "mix.lock" }}
-          paths:
-            - _build
-            - ~/.mix
 
-  dialyzer:
-    docker:
-      - image: circleci/elixir:1.10.3
-        environment:
-          MIX_ENV: test
-    steps:
-      - checkout
-      - run: echo "$OTP_VERSION $ELIXIR_VERSION" > .version_file
       - restore_cache:
-          keys:
-            - v1-plt-cache-{{ checksum "mix.lock" }}
-            - v1-plt-cache
-      - run:
-          name: Execute dialyzer
-          command: mix dialyzer --halt-exit-status
+          key: v1-deps-cache-{{ checksum "mix.lock" }}
+      - run: mix do deps.get, deps.compile
+      - save_cache:
+          key: v1-deps-cache-{{ checksum "mix.lock" }}
+          paths:
+            - deps
+            - ~/.mix
+            - _build
+
+  # dialyzer:
+  #   docker:
+  #     - image: circleci/elixir:1.10.3
+  #       environment:
+  #         MIX_ENV: test
+  #   steps:
+  #     - checkout
+  #     - run: echo "$OTP_VERSION $ELIXIR_VERSION" > .version_file
+  #     - restore_cache:
+  #         keys:
+  #           - v1-plt-cache-{{ checksum "mix.lock" }}
+  #           - v1-plt-cache
+  #     - run:
+  #         name: Execute dialyzer
+  #         command: mix dialyzer --halt-exit-status
 
   test:
     docker:
@@ -88,9 +87,9 @@ workflows:
       - format_check:
           requires:
             - build
-      - dialyzer:
-          requires:
-            - build
+      # - dialyzer:
+      #     requires:
+      #       - build
       - test:
           requires:
             - build
