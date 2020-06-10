@@ -20,7 +20,16 @@ jobs:
             - deps
             - ~/.mix
             - _build
+      - restore_cache:
+          keys:
+            - v1-plt-cache-{{ checksum "mix.lock" }}
+            - v1-plt-cache
       - run: mix dialyzer --plt
+      - save_cache:
+          key: v1-plt-cache-{{ checksum "mix.lock" }}
+          paths:
+            - _build
+            - ~/.mix
 
   dialyzer:
     docker:
@@ -32,7 +41,8 @@ jobs:
       - run: echo "$OTP_VERSION $ELIXIR_VERSION" > .version_file
       - restore_cache:
           keys:
-            - plt-cache-{{ checksum ".version_file" }}-{{ checksum "mix.lock" }}
+            - v1-plt-cache-{{ checksum "mix.lock" }}
+            - v1-plt-cache
       - run:
           name: Execute dialyzer
           command: mix dialyzer --halt-exit-status
