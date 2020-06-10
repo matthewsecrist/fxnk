@@ -24,6 +24,7 @@ jobs:
       - restore_cache:
           keys:
             - plt-cache-{{ checksum ".version_file" }}-{{ checksum "mix.lock" }}
+      - run: mix dialyxir --plt
       - save_cache:
           key: plt-cache-{{ checksum ".version_file"  }}-{{ checksum "mix.lock" }}
           paths:
@@ -31,21 +32,21 @@ jobs:
             - deps
             - ~/.mix
 
-  # dialyzer:
-  #   docker:
-  #     - image: circleci/elixir:1.10.3
-  #       environment:
-  #         MIX_ENV: test
-  #   steps:
-  #     - checkout
-  #     - run: echo "$OTP_VERSION $ELIXIR_VERSION" > .version_file
-  #     - restore_cache:
-  #         keys:
-  #           - v1-plt-cache-{{ checksum "mix.lock" }}
-  #           - v1-plt-cache
-  #     - run:
-  #         name: Execute dialyzer
-  #         command: mix dialyzer --halt-exit-status
+  dialyzer:
+    docker:
+      - image: circleci/elixir:1.10.3
+        environment:
+          MIX_ENV: test
+    steps:
+      - checkout
+      - run: echo "$OTP_VERSION $ELIXIR_VERSION" > .version_file
+      - restore_cache:
+          keys:
+            - v1-plt-cache-{{ checksum "mix.lock" }}
+            - v1-plt-cache
+      - run:
+          name: Execute dialyzer
+          command: mix dialyzer --halt-exit-status
 
   test:
     docker:
@@ -97,9 +98,9 @@ workflows:
       - format_check:
           requires:
             - build
-      # - dialyzer:
-      #     requires:
-      #       - build
+      - dialyzer:
+          requires:
+            - build
       - test:
           requires:
             - build
