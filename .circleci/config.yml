@@ -22,6 +22,21 @@ jobs:
             - _build
       - run: mix dialyzer --plt
 
+  dialyzer:
+    docker:
+      - image: circleci/elixir:1.10.3
+        environment:
+          MIX_ENV: test
+    steps:
+      - checkout
+      - run: echo "$OTP_VERSION $ELIXIR_VERSION" > .version_file
+      - restore_cache:
+          keys:
+            - plt-cache-{{ checksum ".version_file" }}-{{ checksum "mix.lock" }}
+      - run:
+          name: Execute dialyzer
+          command: mix dialyzer --halt-exit-status
+
   test:
     docker:
       - image: circleci/elixir:1.10.3
