@@ -42,7 +42,7 @@ defmodule Fxnk.MixProject do
     [
       {:excoveralls, "~> 0.9.0"},
       {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
       {:mix_test_watch, "~> 1.0", only: :dev, runtime: false}
       # {:dep_from_hexpm, "~> 0.3.0"},
