@@ -1,7 +1,4 @@
-# Elixir CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-elixir/ for more details
-version: 2
+version: 2.1
 jobs:
   build:
     docker:
@@ -12,20 +9,58 @@ jobs:
       - checkout
       - run: mix local.hex --force
       - run: mix local.rebar --force
+      - restore_cache:
+          key: deps-cache-{{ checksum "mix.lock" }}
       - run: mix do deps.get, deps.compile
+      - save_cache:
+          key: deps-cache-{{ checksum "mix.lock" }}
+          paths:
+            - deps
+            - ~/.mix
+            - _build
+      - run: mix compile
+      - run: echo "$OTP_VERSION $ELIXIR_VERSION" > .version_file
       - restore_cache:
           keys:
-            - v1-plt-cache-{{ checksum "mix.lock" }}
-            - v1-plt-cache
+            - plt-cache-{{ checksum ".version_file" }}-{{ checksum "mix.lock" }}
       - run: mix dialyzer --plt
       - save_cache:
-          key: v1-plt-cache-{{ checksum "mix.lock" }}
+          key: plt-cache-{{ checksum ".version_file"  }}-{{ checksum "mix.lock" }}
           paths:
             - _build
+            - deps
             - ~/.mix
+
+  format_check:
+    docker:
+      - image: circleci/elixir:1.10.3
+        environment:
+          MIX_ENV: test
+    steps:
+      - checkout
+      - run: mix format --check-formatted
+
+  test:
+    docker:
+      - image: circleci/elixir:1.10.3
+        environment:
+          MIX_ENV: test
+    steps:
       - run: mix test
       - run: mix credo
+      - run: mix coveralls
+    override:
+      - mix coveralls.circle
 
-test:
-  override:
-    - mix coveralls.circle
+  dialyzer:
+    docker:
+      - image: circleci/elixir:1.10.3
+        environment:
+          MIX_ENV: test
+    steps:
+      - checkout
+      - run: echo "$OTP_VERSION $ELIXIR_VERSION" > .version_file
+      - restore_cache:
+          keys:
+            - plt-cache-{{ checksum ".version_file" }}-{{ checksum "mix.lock" }}
+      - run: mix dialyzer --halt-exit-status
