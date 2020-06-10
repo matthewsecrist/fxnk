@@ -10,16 +10,7 @@ jobs:
       - checkout
       - run: mix local.hex --force
       - run: mix local.rebar --force
-
-      - restore_cache:
-          key: v1-deps-cache-{{ checksum "mix.lock" }}
       - run: mix do deps.get, deps.compile
-      - save_cache:
-          key: v1-deps-cache-{{ checksum "mix.lock" }}
-          paths:
-            - deps
-            - ~/.mix
-            - _build
       - restore_cache:
           keys:
             - v1-plt-cache-{{ checksum "mix.lock" }}
