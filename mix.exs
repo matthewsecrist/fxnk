@@ -11,7 +11,13 @@ defmodule Fxnk.MixProject do
       deps: deps(),
       description: description(),
       package: package(),
-      # Docs
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ],
       name: "Fxnk",
       source_url: "https://github.com/matthewsecrist/fxnk",
       homepage_url: "https://github.com/matthewsecrist/fxnk",
@@ -33,6 +39,7 @@ defmodule Fxnk.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:excoveralls, "~> 0.9.0"},
       {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},

@@ -24,3 +24,7 @@ jobs:
             - ~/.mix
       - run: mix test
       - run: mix credo
+
+test:
+  override:
+    - mix coveralls.circle
