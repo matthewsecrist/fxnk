@@ -4,7 +4,7 @@ defmodule Fxnk.MixProject do
   def project do
     [
       app: :fxnk,
-      version: "0.1.1",
+      version: "0.1.2",
       elixir: "~> 1.10",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
