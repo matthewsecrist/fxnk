@@ -11,7 +11,7 @@ defmodule Fxnk.Functions do
       iex> fourtyTwo.("hello")
       42
   """
-  @spec always(any()) :: any()
+  @spec always(any()) :: (any() -> any())
   def always(val), do: fn _ -> val end
 
   @doc """
