@@ -12,6 +12,7 @@ defmodule Fxnk.MixProject do
       description: description(),
       package: package(),
       test_coverage: [tool: ExCoveralls],
+      dialyzer: [flags: [:underspecs]],
       preferred_cli_env: [
         coveralls: :test,
         "coveralls.detail": :test,

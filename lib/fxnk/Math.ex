@@ -11,7 +11,7 @@ defmodule Fxnk.Math do
       iex> Fxnk.Math.max([1337, 42, 23])
       1337
   """
-  @spec max([...]) :: any
+  @spec max([any(), ...]) :: any()
   def max([hd | _] = args) do
     find_max(args, hd)
   end
@@ -30,7 +30,7 @@ defmodule Fxnk.Math do
       iex> Fxnk.Math.min([1337, 42, 23])
       23
   """
-  @spec min([...]) :: any
+  @spec min([...]) :: any()
   def min([hd | _] = args) do
     find_min(args, hd)
   end
@@ -48,7 +48,7 @@ defmodule Fxnk.Math do
       iex> Fxnk.Math.add(1, 2)
       3
   """
-  @spec add(number, number) :: number
+  @spec add(number(), number()) :: number()
   def add(a, b) when is_number(a) and is_number(b) do
     a + b
   end
@@ -73,7 +73,7 @@ defmodule Fxnk.Math do
       iex> Fxnk.Math.subtract(5, 1)
       4
   """
-  @spec subtract(number, number) :: number
+  @spec subtract(number(), number()) :: number()
   def subtract(a, b) when is_number(a) and is_number(b) do
     a - b
   end
@@ -86,7 +86,7 @@ defmodule Fxnk.Math do
       iex> minusOne.(5)
       4
   """
-  @spec subtract(number) :: function()
+  @spec subtract(number()) :: function()
   def subtract(n) when is_number(n) do
     curry(fn arg -> arg - n end)
   end
@@ -100,7 +100,7 @@ defmodule Fxnk.Math do
     iex(1)> Fxnk.Math.divide(1, 4)
     0.25
   """
-  @spec divide(number, number) :: float
+  @spec divide(number(), number()) :: float()
   def divide(a, b) when is_number(a) and is_number(b) do
     a / b
   end
@@ -113,7 +113,7 @@ defmodule Fxnk.Math do
       iex> recip.(4)
       0.25
   """
-  @spec divide(number) :: function()
+  @spec divide(number()) :: function()
   def divide(n) when is_number(n) do
     curry(fn arg -> n / arg end)
   end
@@ -127,7 +127,7 @@ defmodule Fxnk.Math do
       iex> Fxnk.Math.multiply(10, 10)
       100
   """
-  @spec multiply(number, number) :: number
+  @spec multiply(number(), number()) :: number()
   def multiply(a, b) when is_number(a) and is_number(b) do
     a * b
   end
@@ -140,7 +140,7 @@ defmodule Fxnk.Math do
       iex> timesTen.(10)
       100
   """
-  @spec multiply(number) :: function()
+  @spec multiply(number()) :: function()
   def multiply(n) when is_number(n) do
     curry(fn arg -> n * arg end)
   end
@@ -152,7 +152,7 @@ defmodule Fxnk.Math do
       iex> Fxnk.Math.avg([1,4,3,2,5])
       3.0
   """
-  @spec avg([number, ...]) :: float
+  @spec avg([number(), ...]) :: float()
   def avg([hd | tail] = list) when is_list(list) do
     avg(tail, hd, 1)
   end
@@ -160,7 +160,6 @@ defmodule Fxnk.Math do
   defp avg([hd | []], n, len), do: (hd + n) / inc(len)
   defp avg([hd | tl], n, len), do: avg(tl, hd + n, inc(len))
 
-  @spec negate(number) :: number
   @doc """
   Multiply a number times -1.
 
@@ -170,6 +169,7 @@ defmodule Fxnk.Math do
     iex> Fxnk.Math.negate(-100)
     100
   """
+  @spec negate(number()) :: number()
   def negate(n) do
     n * -1
   end
@@ -181,7 +181,7 @@ defmodule Fxnk.Math do
       iex> Fxnk.Math.inc(1)
       2
   """
-  @spec inc(integer) :: integer
+  @spec inc(integer()) :: integer()
   def inc(n) when is_integer(n) do
     n + 1
   end
@@ -193,7 +193,7 @@ defmodule Fxnk.Math do
       iex> Fxnk.Math.dec(1)
       0
   """
-  @spec dec(integer) :: integer
+  @spec dec(integer()) :: integer()
   def dec(n) when is_integer(n) do
     n - 1
   end
