@@ -126,29 +126,29 @@ defmodule Fxnk.Map do
   Merges two maps together, if both maps have the same key, the value on the right will be used.
 
   ## Example
-      iex> Fxnk.Map.mergeRight(%{red: "red", blue: "blue"}, %{red: "orange", green: "green"})
+      iex> Fxnk.Map.merge_right(%{red: "red", blue: "blue"}, %{red: "orange", green: "green"})
       %{red: "orange", blue: "blue", green: "green"}
   """
-  @spec mergeRight(map(), map()) :: map()
-  def mergeRight(map1, map2) do
+  @spec merge_right(map(), map()) :: map()
+  def merge_right(map1, map2) do
     Map.merge(map1, map2)
   end
 
   @doc """
   Merges two maps together deeply. If both maps have the wame key, the value on the right will be used.
-  If both keys are a map, the maps will be merged together recursively.
+  If both keys are a map, the maps will be merged together recursively, preferring values on the right.
 
   ## Example
       iex> map1 = %{red: "red", green: %{green: "green", yellowish: "greenish", with_blue: %{turqoise: "blueish green"}}, blue: "blue"}
       iex> map2 = %{red: "orange", green: %{green: "blue and yellow", yellowish: "more yellow than green"}}
-      iex> Fxnk.Map.mergeDeepRight(map1, map2)
+      iex> Fxnk.Map.merge_deep_right(map1, map2)
       %{red: "orange", green: %{green: "blue and yellow", yellowish: "more yellow than green", with_blue: %{turqoise: "blueish green"}}, blue: "blue"}
   """
-  @spec mergeDeepRight(map(), map()) :: map()
-  def mergeDeepRight(map1, map2) do
+  @spec merge_deep_right(map(), map()) :: map()
+  def merge_deep_right(map1, map2) do
     Map.merge(map1, map2, fn _, v1, v2 ->
       if is_map(v1) and is_map(v2) do
-        mergeDeepRight(v1, v2)
+        merge_deep_right(v1, v2)
       else
         v2
       end
@@ -159,27 +159,27 @@ defmodule Fxnk.Map do
   Merges two maps together, if both maps have the same key, the value on the left will be used.
 
   ## Example
-      iex> Fxnk.Map.mergeLeft(%{red: "red", blue: "blue"}, %{red: "orange", green: "green"})
+      iex> Fxnk.Map.merge_left(%{red: "red", blue: "blue"}, %{red: "orange", green: "green"})
       %{red: "red", blue: "blue", green: "green"}
   """
-  @spec mergeLeft(map(), map()) :: map()
-  def mergeLeft(map1, map2) do
+  @spec merge_left(map(), map()) :: map()
+  def merge_left(map1, map2) do
     Map.merge(map2, map1)
   end
 
   @doc """
-  Merges two maps together deeply. If both maps have the wame key, the value on the right will be used.
-  If both keys are a map, the maps will be merged together recursively.
+  Merges two maps together deeply. If both maps have the wame key, the value on the left will be used.
+  If both keys are a map, the maps will be merged together recursively, preferring values on the left.
 
   ## Example
       iex> map1 = %{red: "red", green: %{green: "green", yellowish: "greenish", with_blue: %{turqoise: "blueish green"}}, blue: "blue"}
       iex> map2 = %{red: "orange", green: %{green: "blue and yellow", yellowish: "more yellow than green"}}
-      iex> Fxnk.Map.mergeDeepLeft(map1, map2)
+      iex> Fxnk.Map.merge_deep_left(map1, map2)
       %{red: "red", green: %{green: "green", yellowish: "greenish", with_blue: %{turqoise: "blueish green"}}, blue: "blue"}
   """
-  @spec mergeDeepLeft(map(), map()) :: map()
-  def mergeDeepLeft(map1, map2) do
-    mergeDeepRight(map2, map1)
+  @spec merge_deep_left(map(), map()) :: map()
+  def merge_deep_left(map1, map2) do
+    merge_deep_right(map2, map1)
   end
 
   defp do_pick(_, [], acc), do: acc
