@@ -12,7 +12,7 @@ defmodule Fxnk.List do
       iex> Fxnk.List.reduce_right([1,2,3,4,5], 0, fn a, b -> a + b end)
       15
   """
-  @spec reduce_right(list(any), any, function()) :: any
+  @spec reduce_right(list(any), any, function()) :: any()
   def reduce_right(args, initial, func) do
     args
     |> Enum.reverse()

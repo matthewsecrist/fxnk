@@ -14,7 +14,7 @@ defmodule Fxnk.Logic do
       iex> isTwo?.(3)
       false
   """
-  @spec and?(any) :: fun
+  @spec and?(any) :: (any() -> boolean())
   def and?(x) do
     curry(fn y -> and?(x, y) end)
   end
@@ -28,7 +28,7 @@ defmodule Fxnk.Logic do
       iex> Fxnk.Logic.and?("hello", "world")
       false
   """
-  @spec and?(any, any) :: boolean
+  @spec and?(any, any) :: boolean()
   def and?(x, x), do: true
   def and?(_, _), do: false
 
@@ -42,7 +42,7 @@ defmodule Fxnk.Logic do
       iex> gt10lt20?.(30)
       false
   """
-  @spec both?(function(), function()) :: fun
+  @spec both?(function(), function()) :: (any() -> boolean())
   def both?(func1, func2) do
     curry(fn input -> both?(input, func1, func2) end)
   end
@@ -71,7 +71,7 @@ defmodule Fxnk.Logic do
       iex> Fxnk.Logic.complement(false)
       true
   """
-  @spec complement(boolean) :: boolean
+  @spec complement(any()) :: boolean()
   def complement(bool), do: !bool
 
   @doc """
@@ -86,7 +86,7 @@ defmodule Fxnk.Logic do
       iex> defaultTo42.("thanks for all the fish")
       "thanks for all the fish"
   """
-  @spec default_to(any) :: fun
+  @spec default_to(any()) :: (any() -> boolean())
   def default_to(x), do: curry(fn y -> default_to(y, x) end)
 
   @doc """
@@ -100,7 +100,7 @@ defmodule Fxnk.Logic do
       iex> "hello, world" |> Fxnk.Logic.default_to(42)
       "hello, world"
   """
-  @spec default_to(any, any) :: any
+  @spec default_to(any(), any()) :: any()
   def default_to(x, y) do
     case x do
       false -> y
@@ -119,7 +119,7 @@ defmodule Fxnk.Logic do
       iex> lt10orGt30?.(15)
       false
   """
-  @spec either?(function(), function()) :: fun
+  @spec either?(function(), function()) :: (any() -> boolean())
   def either?(func1, func2) do
     curry(fn input -> either?(input, func1, func2) end)
   end
@@ -133,7 +133,7 @@ defmodule Fxnk.Logic do
       iex> Fxnk.Logic.either?(15, fn x -> x < 10 end, fn x -> x > 30 end)
       false
   """
-  @spec either?(any, function(), function()) :: any
+  @spec either?(any, function(), function()) :: boolean()
   def either?(input, func1, func2) do
     func1.(input) || func2.(input)
   end
@@ -149,7 +149,7 @@ defmodule Fxnk.Logic do
       iex> Fxnk.Logic.is_empty([1,1,2,3,5,8])
       false
   """
-  @spec is_empty(any) :: boolean
+  @spec is_empty(any) :: boolean()
   def is_empty([]), do: true
   def is_empty(%{}), do: true
   def is_empty(_), do: false
@@ -164,7 +164,7 @@ defmodule Fxnk.Logic do
       iex> isNotThree.(4)
       true
   """
-  @spec is_not?(any) :: fun
+  @spec is_not?(any) :: (any() -> boolean())
   def is_not?(x), do: curry(fn y -> is_not?(x, y) end)
 
   @doc """
@@ -176,7 +176,7 @@ defmodule Fxnk.Logic do
       iex> Fxnk.Logic.is_not?(3, 4)
       true
   """
-  @spec is_not?(any, any) :: boolean
+  @spec is_not?(any, any) :: boolean()
   def is_not?(x, x), do: false
   def is_not?(_, _), do: true
 
@@ -189,7 +189,7 @@ defmodule Fxnk.Logic do
     true
 
   """
-  @spec or?(any) :: fun
+  @spec or?(any) :: (boolean() -> boolean())
   def or?(x), do: curry(fn y -> or?(x, y) end)
 
   @doc """
@@ -218,7 +218,7 @@ defmodule Fxnk.Logic do
     iex> greaterThan5?.(3)
     false
   """
-  @spec gt?(number) :: fun
+  @spec gt?(number) :: (number -> boolean())
   def gt?(x) do
     curry(fn y -> x < y end)
   end
@@ -233,7 +233,7 @@ defmodule Fxnk.Logic do
     iex> lessThan5?.(3)
     true
   """
-  @spec lt?(number) :: fun
+  @spec lt?(number) :: (number -> boolean())
   def lt?(x) do
     curry(fn y -> x > y end)
   end

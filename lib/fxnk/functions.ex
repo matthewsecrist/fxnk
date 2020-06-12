@@ -11,8 +11,8 @@ defmodule Fxnk.Functions do
       iex> fourtyTwo.("hello")
       42
   """
-  @spec always(any()) :: function()
-  def always(val), do: curry(fn _ -> val end)
+  @spec always(any()) :: any()
+  def always(val), do: fn _ -> val end
 
   @doc """
   `always/2` returns the second value passed to it always.
@@ -57,7 +57,7 @@ defmodule Fxnk.Functions do
     iex> reverseUpcaseConcat.("hello")
     "ollehHELLO"
   """
-  @spec converge(function(), [function(), ...]) :: function()
+  @spec converge(function(), [function(), ...]) :: (any() -> any())
   def converge(to_fn, fns) do
     curry(fn args -> converge(args, to_fn, fns) end)
   end
@@ -134,7 +134,7 @@ defmodule Fxnk.Functions do
       iex> minmax.([1,3,5,7])
       [1, 7]
   """
-  @spec juxt([function(), ...]) :: function()
+  @spec juxt([function(), ...]) :: (any() -> any())
   def juxt(fns) when is_list(fns) do
     curry(fn arg -> juxt(arg, fns) end)
   end
@@ -146,7 +146,7 @@ defmodule Fxnk.Functions do
       iex> Fxnk.Functions.juxt(%{foo: "foo", bar: "bar", baz: "baz"}, [Fxnk.Map.prop(:foo), Fxnk.Map.prop(:bar)])
       ["foo", "bar"]
   """
-  @spec juxt(any, [function(), ...]) :: any
+  @spec juxt(any, [function(), ...]) :: any()
   def juxt(arg, fns) do
     for func <- fns, do: func.(arg)
   end
@@ -171,7 +171,7 @@ defmodule Fxnk.Functions do
       iex> function.(42)
       42
   """
-  @spec tap(function()) :: function()
+  @spec tap(function()) :: (any() -> any())
   def tap(func) do
     curry(fn val -> tap(val, func) end)
   end
@@ -183,7 +183,7 @@ defmodule Fxnk.Functions do
       iex> Fxnk.Functions.tap(42, &Fxnk.Math.inc/1)
       42
   """
-  @spec tap(any(), function()) :: function()
+  @spec tap(any(), function()) :: (any() -> any())
   def tap(val, func) do
     func.(val)
     val
