@@ -5,7 +5,7 @@ defmodule Fxnk.MixProject do
     [
       app: :fxnk,
       version: "0.1.2",
-      elixir: "~> 1.10",
+      elixir: "~> 1.8",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -18,7 +18,7 @@ defmodule Fxnk.MixProject do
         "coveralls.detail": :test,
         "coveralls.post": :test,
         "coveralls.html": :test,
-        "coveralls.circle": :test
+        "coveralls.github": :test
       ],
       name: "Fxnk",
       source_url: "https://github.com/matthewsecrist/fxnk",
@@ -41,11 +41,11 @@ defmodule Fxnk.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:excoveralls, "~> 0.9.0", only: [:dev, :test], runtime: false},
+      {:excoveralls, "~> 0.13.0", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
-      {:mix_test_watch, "~> 1.0", only: :dev, runtime: false}
+      {:inner_cotton, "~> 0.6", only: [:dev, :test]}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]
