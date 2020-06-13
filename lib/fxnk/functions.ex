@@ -152,6 +152,50 @@ defmodule Fxnk.Functions do
   end
 
   @doc """
+  Task based `juxt/2`. Useful for multiple async functions. While `juxt/2` will run in sequence, juxt_async will run in parallel.
+  For instance, if you've got two functions `sleepTwoSeconds` and `sleepThreeSeconds`, `juxt/2` will respond in five seconds. `juxt_async/2`
+  will respond in 3.
+
+  ## Example
+      iex> addTwo = fn x ->
+      ...> :timer.sleep(1000)
+      ...> x + 2
+      ...> end
+      iex> addThree = fn x ->
+      ...> :timer.sleep(2000)
+      ...> x + 3
+      ...> end
+      iex> Fxnk.Functions.juxt_async(4, [addTwo, addThree])
+      [6, 7]
+  """
+  @spec juxt_async(any(), [function(), ...], non_neg_integer()) :: [any(), ...]
+  def juxt_async(arg, fns, timeout \\ 5000) do
+    tasks = for func <- fns, do: Task.async(fn -> func.(arg) end)
+
+    tasks
+    |> Enum.map(fn t -> Task.await(t, timeout) end)
+  end
+
+  @doc """
+  Task based `Enum.map`. Allows you to concurrently fire off many async functions at the same time, rather than waiting for each to resolve before
+  starting the next one. Returns when the slowest returns.
+
+  ## Example
+      iex> addTwo = fn x ->
+      ...> :timer.sleep(1000)
+      ...> x + 2
+      ...> end
+      iex> Fxnk.Functions.map_async([1,2,3,4,5], [addTwo, addThree])
+      [3,4,5,6,7]
+  """
+  @spec map_async([any(), ...], function(), non_neg_integer()) :: [any(), ...]
+  def map_async(args, function, timeout \\ 5000) do
+    args
+    |> Task.async_stream(function, timeout: timeout)
+    |> Enum.into([], fn {:ok, res} -> res end)
+  end
+
+  @doc """
   Function that always returns true.
 
   ## Example
@@ -187,5 +231,33 @@ defmodule Fxnk.Functions do
   def tap(val, func) do
     func.(val)
     val
+  end
+
+  @doc """
+  Returns the `result` of an `{:ok, result}` response from a function.
+
+  ## Example
+      iex> addTwo = fn x -> {:ok, x + 2} end
+      iex> Fxnk.Functions.ok(4, addTwo)
+      6
+  """
+  @spec ok(any(), (any() -> {:ok | :error, any()})) :: any()
+  def ok(value, function) do
+    with {:ok, result} <- function.(value) do
+      result
+    end
+  end
+
+  @doc """
+  Allows you to partially apply a function. Useful with `ok/2`
+  Returns an anonymous function that takes a single argument.
+
+  ## Examples
+      iex> %{hello: "world"} |> Fxnk.Functions.ok(Fxnk.Functions.partial(Map, :fetch, [:hello]))
+      "world"
+  """
+  @spec partial(module(), atom(), any()) :: (any() -> any())
+  def partial(module, function, args) do
+    fn arg -> apply(module, function, [arg | args]) end
   end
 end
