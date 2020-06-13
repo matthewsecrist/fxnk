@@ -253,7 +253,9 @@ defmodule Fxnk.Logic do
   end
 
   @doc """
-    ## Examples
+  Checks if a value is not `nil`.
+
+  ## Examples
       iex> Fxnk.Logic.not_nil?(nil)
       false
       iex> Fxnk.Logic.not_nil?("not nil")
