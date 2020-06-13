@@ -18,7 +18,7 @@ defmodule Fxnk.MixProject do
         "coveralls.detail": :test,
         "coveralls.post": :test,
         "coveralls.html": :test,
-        "coveralls.circle": :test
+        "coveralls.github": :test
       ],
       name: "Fxnk",
       source_url: "https://github.com/matthewsecrist/fxnk",
