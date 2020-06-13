@@ -207,7 +207,7 @@ defmodule Fxnk.Math do
       iex> between1And10.(15)
       10
   """
-  @spec clamp(integer(), integer()) :: fun
+  @spec clamp(integer(), integer()) :: (integer() -> number())
   def clamp(from, to) do
     fn n -> clamp(n, from, to) end
   end
@@ -223,7 +223,7 @@ defmodule Fxnk.Math do
       iex> Fxnk.Math.clamp(17, 15, 20)
       17
   """
-  @spec clamp(integer(), integer(), integer()) :: integer()
+  @spec clamp(integer(), integer(), integer()) :: number()
   def clamp(n, from, to) do
     cond do
       n <= from -> from
