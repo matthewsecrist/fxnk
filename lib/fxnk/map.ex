@@ -2,7 +2,6 @@ defmodule Fxnk.Map do
   @moduledoc """
   `Fxnk.Map` are functions that work with maps.
   """
-  import Fxnk.Functions, only: [curry: 1]
 
   @doc """
   Accepts a string `key` and returns a function that takes a `map`. Returns the map's value at `key` or `nil`.
@@ -17,7 +16,7 @@ defmodule Fxnk.Map do
   """
   @spec prop(atom() | binary()) :: (map() -> any())
   def prop(key) when is_binary(key) or is_atom(key) do
-    curry(fn map -> prop(map, key) end)
+    fn map -> prop(map, key) end
   end
 
   @doc """
@@ -47,7 +46,7 @@ defmodule Fxnk.Map do
   """
   @spec props([atom() | binary(), ...]) :: (map() -> [any(), ...])
   def props(keys) when is_list(keys) do
-    curry(fn map -> props(map, keys) end)
+    fn map -> props(map, keys) end
   end
 
   @doc """
@@ -74,7 +73,7 @@ defmodule Fxnk.Map do
   """
   @spec pick([atom(), ...]) :: (map() -> map())
   def pick(args) when is_list(args) do
-    curry(fn map -> pick(map, args) end)
+    fn map -> pick(map, args) end
   end
 
   @doc """
@@ -105,7 +104,7 @@ defmodule Fxnk.Map do
   """
   @spec has_prop?(atom() | String.t()) :: (map() -> boolean())
   def has_prop?(property) when is_binary(property) or is_atom(property) do
-    curry(fn map -> has_prop?(map, property) end)
+    fn map -> has_prop?(map, property) end
   end
 
   @doc """

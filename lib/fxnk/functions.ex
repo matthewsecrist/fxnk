@@ -59,7 +59,7 @@ defmodule Fxnk.Functions do
   """
   @spec converge(function(), [function(), ...]) :: (any() -> any())
   def converge(to_fn, fns) do
-    curry(fn args -> converge(args, to_fn, fns) end)
+    fn args -> converge(args, to_fn, fns) end
   end
 
   @doc """
@@ -136,7 +136,7 @@ defmodule Fxnk.Functions do
   """
   @spec juxt([function(), ...]) :: (any() -> any())
   def juxt(fns) when is_list(fns) do
-    curry(fn arg -> juxt(arg, fns) end)
+    fn arg -> juxt(arg, fns) end
   end
 
   @doc """
@@ -173,7 +173,7 @@ defmodule Fxnk.Functions do
   """
   @spec tap(function()) :: (any() -> any())
   def tap(func) do
-    curry(fn val -> tap(val, func) end)
+    fn val -> tap(val, func) end
   end
 
   @doc """

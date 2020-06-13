@@ -2,7 +2,6 @@ defmodule Fxnk.Math do
   @moduledoc """
   `Fxnk.Math` are functions dealing with math.
   """
-  import Fxnk.Functions, only: [curry: 1]
 
   @doc """
   Find the maximum of a list.
@@ -63,7 +62,7 @@ defmodule Fxnk.Math do
   """
   @spec add(number) :: function()
   def add(n) when is_number(n) do
-    curry(fn arg -> arg + n end)
+    fn arg -> arg + n end
   end
 
   @doc """
@@ -88,7 +87,7 @@ defmodule Fxnk.Math do
   """
   @spec subtract(number()) :: function()
   def subtract(n) when is_number(n) do
-    curry(fn arg -> arg - n end)
+    fn arg -> arg - n end
   end
 
   @doc """
@@ -115,7 +114,7 @@ defmodule Fxnk.Math do
   """
   @spec divide(number()) :: function()
   def divide(n) when is_number(n) do
-    curry(fn arg -> n / arg end)
+    fn arg -> n / arg end
   end
 
   @doc """
@@ -142,7 +141,7 @@ defmodule Fxnk.Math do
   """
   @spec multiply(number()) :: function()
   def multiply(n) when is_number(n) do
-    curry(fn arg -> n * arg end)
+    fn arg -> n * arg end
   end
 
   @doc """
@@ -210,7 +209,7 @@ defmodule Fxnk.Math do
   """
   @spec clamp(integer(), integer()) :: fun
   def clamp(from, to) do
-    curry(fn n -> clamp(n, from, to) end)
+    fn n -> clamp(n, from, to) end
   end
 
   @doc """

@@ -2,7 +2,6 @@ defmodule Fxnk.Flow do
   @moduledoc """
   `Fxnk.Flow` functions are used for control flow.
   """
-  import Fxnk.Functions, only: [curry: 1]
   import Fxnk.List, only: [reduce_right: 3]
 
   @doc """
@@ -15,7 +14,7 @@ defmodule Fxnk.Flow do
   """
   @spec compose([function(), ...]) :: (any() -> any())
   def compose(fns) when is_list(fns) do
-    curry(fn arg -> compose(arg, fns) end)
+    fn arg -> compose(arg, fns) end
   end
 
   @doc """
@@ -43,7 +42,7 @@ defmodule Fxnk.Flow do
   """
   @spec if_else(function(), function(), function()) :: (any() -> any())
   def if_else(pred, passFunc, failFunc) do
-    curry(fn input -> if_else(input, pred, passFunc, failFunc) end)
+    fn input -> if_else(input, pred, passFunc, failFunc) end
   end
 
   @doc """
@@ -74,7 +73,7 @@ defmodule Fxnk.Flow do
   """
   @spec pipe([function(), ...]) :: (any() -> any())
   def pipe(fns) when is_list(fns) do
-    curry(fn arg -> pipe(arg, fns) end)
+    fn arg -> pipe(arg, fns) end
   end
 
   @doc """
@@ -102,7 +101,7 @@ defmodule Fxnk.Flow do
   """
   @spec unless_is(function(), function()) :: (any() -> any())
   def unless_is(pred, func) do
-    curry(fn input -> unless_is(input, pred, func) end)
+    fn input -> unless_is(input, pred, func) end
   end
 
   @doc """
@@ -133,7 +132,7 @@ defmodule Fxnk.Flow do
   """
   @spec until(function(), function()) :: (any() -> any())
   def until(pred, func) do
-    curry(fn init -> until(init, pred, func) end)
+    fn init -> until(init, pred, func) end
   end
 
   @doc """
@@ -164,7 +163,7 @@ defmodule Fxnk.Flow do
   """
   @spec when_is(function(), function()) :: (any() -> any())
   def when_is(pred, func) do
-    curry(fn input -> when_is(input, pred, func) end)
+    fn input -> when_is(input, pred, func) end
   end
 
   @doc """

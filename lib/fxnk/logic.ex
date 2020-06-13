@@ -2,7 +2,6 @@ defmodule Fxnk.Logic do
   @moduledoc """
   `Fxnk.Logic` are functions for dealing with booleans.
   """
-  import Fxnk.Functions, only: [curry: 1]
 
   @doc """
   Curried `and?/2`.
@@ -16,7 +15,7 @@ defmodule Fxnk.Logic do
   """
   @spec and?(any) :: (any() -> boolean())
   def and?(x) do
-    curry(fn y -> and?(x, y) end)
+    fn y -> and?(x, y) end
   end
 
   @doc """
@@ -44,7 +43,7 @@ defmodule Fxnk.Logic do
   """
   @spec both?(function(), function()) :: (any() -> boolean())
   def both?(func1, func2) do
-    curry(fn input -> both?(input, func1, func2) end)
+    fn input -> both?(input, func1, func2) end
   end
 
   @doc """
@@ -87,7 +86,7 @@ defmodule Fxnk.Logic do
       "thanks for all the fish"
   """
   @spec default_to(any()) :: (any() -> boolean())
-  def default_to(x), do: curry(fn y -> default_to(y, x) end)
+  def default_to(x), do: fn y -> default_to(y, x) end
 
   @doc """
   `default_to/2` takes two values and returns the right side value if the left side is `false` or `nil`
@@ -121,7 +120,7 @@ defmodule Fxnk.Logic do
   """
   @spec either?(function(), function()) :: (any() -> boolean())
   def either?(func1, func2) do
-    curry(fn input -> either?(input, func1, func2) end)
+    fn input -> either?(input, func1, func2) end
   end
 
   @doc """
@@ -165,7 +164,7 @@ defmodule Fxnk.Logic do
       true
   """
   @spec is_not?(any) :: (any() -> boolean())
-  def is_not?(x), do: curry(fn y -> is_not?(x, y) end)
+  def is_not?(x), do: fn y -> is_not?(x, y) end
 
   @doc """
   `is_not/3` returns true if both inputs are not the same, opposite of `and?/2`
@@ -190,7 +189,7 @@ defmodule Fxnk.Logic do
 
   """
   @spec or?(any) :: (boolean() -> boolean())
-  def or?(x), do: curry(fn y -> or?(x, y) end)
+  def or?(x), do: fn y -> or?(x, y) end
 
   @doc """
   `or/2` returns true if one or both of its arguments are true.
@@ -220,7 +219,7 @@ defmodule Fxnk.Logic do
   """
   @spec gt?(number) :: (number -> boolean())
   def gt?(x) do
-    curry(fn y -> x < y end)
+    fn y -> x < y end
   end
 
   @doc """
@@ -235,7 +234,7 @@ defmodule Fxnk.Logic do
   """
   @spec lt?(number) :: (number -> boolean())
   def lt?(x) do
-    curry(fn y -> x > y end)
+    fn y -> x > y end
   end
 
   @doc """
