@@ -60,7 +60,7 @@ defmodule Fxnk.Math do
       iex> addOne.(2)
       3
   """
-  @spec add(number) :: function()
+  @spec add(number) :: (number() -> number())
   def add(n) when is_number(n) do
     fn arg -> arg + n end
   end
@@ -85,7 +85,7 @@ defmodule Fxnk.Math do
       iex> minusOne.(5)
       4
   """
-  @spec subtract(number()) :: function()
+  @spec subtract(number()) :: (number() -> number())
   def subtract(n) when is_number(n) do
     fn arg -> arg - n end
   end
@@ -112,7 +112,7 @@ defmodule Fxnk.Math do
       iex> recip.(4)
       0.25
   """
-  @spec divide(number()) :: function()
+  @spec divide(number()) :: (number() -> float())
   def divide(n) when is_number(n) do
     fn arg -> n / arg end
   end
@@ -139,7 +139,7 @@ defmodule Fxnk.Math do
       iex> timesTen.(10)
       100
   """
-  @spec multiply(number()) :: function()
+  @spec multiply(number()) :: (number() -> number())
   def multiply(n) when is_number(n) do
     fn arg -> n * arg end
   end
