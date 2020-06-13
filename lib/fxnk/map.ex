@@ -65,6 +65,46 @@ defmodule Fxnk.Map do
   end
 
   @doc """
+  Curried `prop_equals/3`, takes a value, returns a function that accepts a map and a key.
+
+  ## Examples
+      iex> isFoo = Fxnk.Map.prop_equals("foo")
+      iex> isFoo.(%{foo: "foo"}, :foo)
+      true
+  """
+  @spec prop_equals(any()) :: (map(), atom() | String.t() -> boolean())
+  def prop_equals(value) do
+    fn map, key -> prop_equals(map, key, value) end
+  end
+
+  @doc """
+  Curried `prop_equals/3`, takes a key and a value. Returns a function that accepts a map.
+
+  ## Examples
+      iex> isKeyFoo = Fxnk.Map.prop_equals(:foo, "foo")
+      iex> isKeyFoo.(%{foo: "foo"})
+      true
+  """
+  @spec prop_equals(atom | binary, any) :: (map() -> boolean())
+  def prop_equals(key, value) when is_atom(key) or is_binary(key) do
+    fn map -> prop_equals(map, key, value) end
+  end
+
+  @doc """
+  Accepts a map, key and value. Checks to see if the key on the map is equal to the value.any()
+
+  ## Examples
+    iex> Fxnk.Map.prop_equals(%{foo: "foo"}, :foo, "foo")
+    true
+    iex> Fxnk.Map.prop_equals(%{foo: "bar"}, :foo, "foo")
+    false
+  """
+  @spec prop_equals(map(), atom() | binary(), any()) :: boolean()
+  def prop_equals(map, key, value) when is_map(map) and (is_binary(key) or is_atom(key)) do
+    map[key] === value
+  end
+
+  @doc """
   Accepts a list of args, returns a curried `pick/2`.
 
   ## Examples
