@@ -2,7 +2,7 @@
 
 Fxnk is a functional programming library for Elixir inspired by Ramda.
 
-[![Actions Status](https://github.com/AUTHER_NAME/PROJECT_NAME/workflows/test/badge.svg)](https://github.com/AUTHER_NAME/PROJECT_NAME/actions)
+[![Actions Status](https://github.com/matthewsecrist/fxnk/workflows/test/badge.svg)](https://github.com/matthewsecrist/fxnk/actions)
 
 [![Coverage Status](https://coveralls.io/repos/github/matthewsecrist/fxnk/badge.svg?branch=master)](https://coveralls.io/github/matthewsecrist/fxnk?branch=master)
 
