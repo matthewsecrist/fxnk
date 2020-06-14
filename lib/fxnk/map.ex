@@ -5,6 +5,45 @@ defmodule Fxnk.Map do
   import Fxnk.Functions, only: [curry: 1]
 
   @doc """
+  Curried `assemble/2`
+
+  ## Examples
+      iex> map = %{red: "red", green: "green", blue: "blue" }
+      iex> fnmap = %{
+      ...> red: Fxnk.Flow.compose([&String.upcase/1, Fxnk.Map.prop(:red)]),
+      ...> blue: Fxnk.Flow.compose([&String.reverse/1, Fxnk.Map.prop(:blue)])
+      ...> }
+      iex> assembler = Fxnk.Map.assemble(fnmap)
+      iex> assembler.(map)
+      %{red: "RED", blue: "eulb"}
+  """
+  def assemble(fn_map) do
+    fn map -> assemble(map, fn_map) end
+  end
+
+  @doc """
+  Takes an initial map and a "builder" map where each value is a function. Builds a new map by setting the keys in the function map to
+  the values returned by the function applied to the original map.
+
+  ## Examples
+      iex> map = %{red: "red", green: "green", blue: "blue" }
+      iex> fnmap = %{
+      ...> red: Fxnk.Flow.compose([&String.upcase/1, Fxnk.Map.prop(:red)]),
+      ...> blue: Fxnk.Flow.compose([&String.reverse/1, Fxnk.Map.prop(:blue)])
+      ...> }
+      iex> Fxnk.Map.assemble(map, fnmap)
+      %{red: "RED", blue: "eulb"}
+  """
+  @spec assemble(map(), %{any() => function()}) :: any()
+  def assemble(map, fn_map) do
+    fn_map
+    |> Map.to_list()
+    |> Enum.reduce(%{}, fn {key, function}, acc ->
+      Map.put_new(acc, key, function.(map))
+    end)
+  end
+
+  @doc """
   Accepts a string `key` and returns a function that takes a `map`. Returns the map's value at `key` or `nil`.
 
   ## Examples
