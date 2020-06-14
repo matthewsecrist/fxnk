@@ -61,4 +61,18 @@ defmodule Fxnk.List do
   def reduce_map_right(keys, values) do
     reduce_map(values, keys)
   end
+
+  @doc """
+  Takes a list of maps and a key, returns a list of values in the key over all the maps
+
+  ## Examples
+      iex> list = [%{user_id: "1234"}, %{user_id: "4567"}, %{user_id: "6789"}]
+      iex> Fxnk.List.pluck(list, :user_id)
+      ["1234", "4567", "6789"]
+  """
+  @spec pluck([map(), ...], binary() | atom()) :: [any()]
+  def pluck(list, property) do
+    list
+    |> Enum.map(fn map -> Fxnk.Map.prop(map, property) end)
+  end
 end
