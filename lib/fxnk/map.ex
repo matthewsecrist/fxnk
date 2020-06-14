@@ -63,13 +63,27 @@ defmodule Fxnk.Map do
 
   ## Examples
       iex> map = %{red: "red", green: "green", blue: "blue"}
-      iex> colorCombiner = fn %{red: red, blue: blue} -> %{purple: red <> blue} end
+      iex> colorCombiner = Fxnk.Functions.always(%{purple: "purple"})
       iex> Fxnk.Map.combine(map, colorCombiner)
-      %{red: "red", green: "green", blue: "blue", purple: "redblue"}
+      %{red: "red", green: "green", blue: "blue", purple: "purple"}
   """
   @spec combine(map(), (map() -> map())) :: map()
   def combine(map, function) do
     Map.merge(function.(map), map)
+  end
+
+  @doc """
+  `combine/2` but also accepts a combining function as the last arguments.
+
+  ## Examples
+      iex> map = %{colors: %{red: "red", green: "green", blue: "blue"}}
+      iex> colorCombiner = Fxnk.Functions.always(%{colors: %{red: "fire red", purple: "purple"}})
+      iex> Fxnk.Map.combine_with(map, colorCombiner, &Fxnk.Map.merge_deep_right/2)
+      %{colors: %{red: "fire red", green: "green", blue: "blue", purple: "purple"}}
+  """
+  @spec combine_with(map(), (map() -> map()), (map(), map() -> map())) :: map()
+  def combine_with(map, function, combining_function) do
+    apply(combining_function, [map, function.(map)])
   end
 
   @doc """
@@ -243,7 +257,7 @@ defmodule Fxnk.Map do
   end
 
   @doc """
-  Merges two maps together deeply. If both maps have the wame key, the value on the right will be used.
+  Merges two maps together deeply. If both maps have the same key, the value on the right will be used.
   If both keys are a map, the maps will be merged together recursively, preferring values on the right.
 
   ## Example
@@ -276,7 +290,7 @@ defmodule Fxnk.Map do
   end
 
   @doc """
-  Merges two maps together deeply. If both maps have the wame key, the value on the left will be used.
+  Merges two maps together deeply. If both maps have the same key, the value on the left will be used.
   If both keys are a map, the maps will be merged together recursively, preferring values on the left.
 
   ## Example
