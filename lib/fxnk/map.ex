@@ -45,6 +45,34 @@ defmodule Fxnk.Map do
   end
 
   @doc """
+  Takes a map and a function that accepts a map and returns a map. Runs the map against the function and merges the initial map into the result.
+
+  ## Examples
+      iex> map = %{red: "red", green: "green", blue: "blue"}
+      iex> colorCombiner = Fxnk.Map.combine(fn %{red: red, blue: blue} -> %{purple: red <> blue} end)
+      iex> colorCombiner.(map)
+      %{red: "red", green: "green", blue: "blue", purple: "redblue"}
+  """
+  @spec combine((map() -> map())) :: (map() -> map())
+  def combine(function) do
+    fn map -> combine(map, function) end
+  end
+
+  @doc """
+  Takes a map and a function that accepts a map and returns a map. Runs the map against the function and merges the initial map into the result.
+
+  ## Examples
+      iex> map = %{red: "red", green: "green", blue: "blue"}
+      iex> colorCombiner = fn %{red: red, blue: blue} -> %{purple: red <> blue} end
+      iex> Fxnk.Map.combine(map, colorCombiner)
+      %{red: "red", green: "green", blue: "blue", purple: "redblue"}
+  """
+  @spec combine(map(), (map() -> map())) :: map()
+  def combine(map, function) do
+    Map.merge(function.(map), map)
+  end
+
+  @doc """
   Accepts a string `key` and returns a function that takes a `map`. Returns the map's value at `key` or `nil`.
 
   ## Examples
