@@ -72,7 +72,6 @@ defmodule Fxnk.List do
   """
   @spec pluck([map(), ...], binary() | atom()) :: [any()]
   def pluck(list, property) do
-    list
-    |> Enum.map(fn map -> Fxnk.Map.prop(map, property) end)
+    Enum.map(list, fn map -> Fxnk.Map.prop(map, property) end)
   end
 end
