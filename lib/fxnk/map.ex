@@ -17,6 +17,7 @@ defmodule Fxnk.Map do
       iex> assembler.(map)
       %{red: "RED", blue: "eulb"}
   """
+  @spec assemble(%{any() => function()}) :: (map() -> map())
   def assemble(fn_map) do
     fn map -> assemble(map, fn_map) end
   end
