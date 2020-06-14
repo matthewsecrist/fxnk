@@ -12,7 +12,7 @@ defmodule Fxnk.FunctionsTest do
 
   test "pipeable juxt works with a list" do
     fns = [&min/1, &max/1]
-    result = [1, 2, 3, 4, 5] |> juxt(fns)
+    result = juxt([1, 2, 3, 4, 5], fns)
     assert result == [1, 5]
   end
 

@@ -172,8 +172,7 @@ defmodule Fxnk.Functions do
   def juxt_async(arg, fns, timeout \\ 5000) do
     tasks = for func <- fns, do: Task.async(fn -> func.(arg) end)
 
-    tasks
-    |> Enum.map(fn t -> Task.await(t, timeout) end)
+    Enum.map(tasks, fn t -> Task.await(t, timeout) end)
   end
 
   @doc """
