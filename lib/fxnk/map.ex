@@ -304,6 +304,35 @@ defmodule Fxnk.Map do
     merge_deep_right(map2, map1)
   end
 
+  @doc """
+  Rename a key in a map, takes the map, current key and replacement key. Returns the original map with the updated key.
+
+  ## Example
+      iex> Fxnk.Map.rename(%{id: "1234"}, :id, :user_id)
+      %{user_id: "1234"}
+      iex> Fxnk.Map.rename(%{hello: "world", foo: "foo" }, :foo, :bar)
+      %{hello: "world", bar: "foo"}
+  """
+  @spec rename(map(), String.t() | atom(), String.t() | atom()) :: map()
+  def rename(map, key, new_key) do
+    {value, popped_map} = Access.pop(map, key)
+
+    Map.merge(popped_map, %{new_key => value})
+  end
+
+  @doc """
+  Rename multiple keys in a map. Takes the original map and a map where the key is the original key and the value is the replacement key.
+
+  ## Example
+      iex> Fxnk.Map.rename_all(%{user_id: "1234", foo: "foo", bar: "bar"}, %{user_id: :id, bar: :baz})
+      %{id: "1234", foo: "foo", baz: "bar"}
+  """
+  @spec rename_all(map(), map()) :: map()
+  def rename_all(map, renames) do
+    Map.to_list(renames)
+    |> Enum.reduce(map, fn {old, new}, acc -> rename(acc, old, new) end)
+  end
+
   defp do_pick(_, [], acc), do: acc
 
   defp do_pick(map, [hd | tl], acc) do
