@@ -176,10 +176,10 @@ defmodule Fxnk.Map do
   Accepts a map, key and value. Checks to see if the key on the map is equal to the value.any()
 
   ## Examples
-    iex> Fxnk.Map.prop_equals(%{foo: "foo"}, :foo, "foo")
-    true
-    iex> Fxnk.Map.prop_equals(%{foo: "bar"}, :foo, "foo")
-    false
+      iex> Fxnk.Map.prop_equals(%{foo: "foo"}, :foo, "foo")
+      true
+      iex> Fxnk.Map.prop_equals(%{foo: "bar"}, :foo, "foo")
+      false
   """
   @spec prop_equals(map(), atom() | binary(), any()) :: boolean()
   def prop_equals(map, key, value) when is_map(map) and (is_binary(key) or is_atom(key)) do
