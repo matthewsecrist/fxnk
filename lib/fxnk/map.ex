@@ -329,7 +329,8 @@ defmodule Fxnk.Map do
   """
   @spec rename_all(map(), map()) :: map()
   def rename_all(map, renames) do
-    Map.to_list(renames)
+    renames
+    |> Map.to_list()
     |> Enum.reduce(map, fn {old, new}, acc -> rename(acc, old, new) end)
   end
 
