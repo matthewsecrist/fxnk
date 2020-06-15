@@ -61,7 +61,7 @@ defmodule Fxnk.Math do
       iex> addOne.(2)
       3
   """
-  @spec add(number) :: function()
+  @spec add(number()) :: (number() -> number())
   def add(n) when is_number(n) do
     curry(fn arg -> arg + n end)
   end
@@ -86,7 +86,7 @@ defmodule Fxnk.Math do
       iex> minusOne.(5)
       4
   """
-  @spec subtract(number()) :: function()
+  @spec subtract(number()) :: (number() -> number())
   def subtract(n) when is_number(n) do
     curry(fn arg -> arg - n end)
   end
@@ -113,7 +113,7 @@ defmodule Fxnk.Math do
       iex> recip.(4)
       0.25
   """
-  @spec divide(number()) :: function()
+  @spec divide(number()) :: (number() -> number())
   def divide(n) when is_number(n) do
     curry(fn arg -> n / arg end)
   end
@@ -140,7 +140,7 @@ defmodule Fxnk.Math do
       iex> timesTen.(10)
       100
   """
-  @spec multiply(number()) :: function()
+  @spec multiply(number()) :: (number() -> number())
   def multiply(n) when is_number(n) do
     curry(fn arg -> n * arg end)
   end
@@ -181,8 +181,8 @@ defmodule Fxnk.Math do
       iex> Fxnk.Math.inc(1)
       2
   """
-  @spec inc(integer()) :: integer()
-  def inc(n) when is_integer(n) do
+  @spec inc(number()) :: number()
+  def inc(n) when is_number(n) do
     n + 1
   end
 
@@ -193,8 +193,8 @@ defmodule Fxnk.Math do
       iex> Fxnk.Math.dec(1)
       0
   """
-  @spec dec(integer()) :: integer()
-  def dec(n) when is_integer(n) do
+  @spec dec(number()) :: number()
+  def dec(n) when is_number(n) do
     n - 1
   end
 
@@ -208,7 +208,7 @@ defmodule Fxnk.Math do
       iex> between1And10.(15)
       10
   """
-  @spec clamp(integer(), integer()) :: fun
+  @spec clamp(number(), number()) :: (number() -> number())
   def clamp(from, to) do
     curry(fn n -> clamp(n, from, to) end)
   end
@@ -224,7 +224,7 @@ defmodule Fxnk.Math do
       iex> Fxnk.Math.clamp(17, 15, 20)
       17
   """
-  @spec clamp(integer(), integer(), integer()) :: integer()
+  @spec clamp(number(), number(), number()) :: number()
   def clamp(n, from, to) do
     cond do
       n <= from -> from

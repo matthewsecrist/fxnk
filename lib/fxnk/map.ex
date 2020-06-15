@@ -5,6 +5,88 @@ defmodule Fxnk.Map do
   import Fxnk.Functions, only: [curry: 1]
 
   @doc """
+  Curried `assemble/2`
+
+  ## Examples
+      iex> map = %{red: "red", green: "green", blue: "blue" }
+      iex> fnmap = %{
+      ...> red: Fxnk.Flow.compose([&String.upcase/1, Fxnk.Map.prop(:red)]),
+      ...> blue: Fxnk.Flow.compose([&String.reverse/1, Fxnk.Map.prop(:blue)])
+      ...> }
+      iex> assembler = Fxnk.Map.assemble(fnmap)
+      iex> assembler.(map)
+      %{red: "RED", blue: "eulb"}
+  """
+  @spec assemble(%{any() => function()}) :: (map() -> map())
+  def assemble(fn_map) do
+    fn map -> assemble(map, fn_map) end
+  end
+
+  @doc """
+  Takes an initial map and a "builder" map where each value is a function. Builds a new map by setting the keys in the function map to
+  the values returned by the function applied to the original map.
+
+  ## Examples
+      iex> map = %{red: "red", green: "green", blue: "blue" }
+      iex> fnmap = %{
+      ...> red: Fxnk.Flow.compose([&String.upcase/1, Fxnk.Map.prop(:red)]),
+      ...> blue: Fxnk.Flow.compose([&String.reverse/1, Fxnk.Map.prop(:blue)])
+      ...> }
+      iex> Fxnk.Map.assemble(map, fnmap)
+      %{red: "RED", blue: "eulb"}
+  """
+  @spec assemble(map(), %{any() => function()}) :: any()
+  def assemble(map, fn_map) do
+    fn_map
+    |> Map.to_list()
+    |> Enum.reduce(%{}, fn {key, function}, acc ->
+      Map.put_new(acc, key, function.(map))
+    end)
+  end
+
+  @doc """
+  Takes a map and a function that accepts a map and returns a map. Runs the map against the function and merges the initial map into the result.
+
+  ## Examples
+      iex> map = %{red: "red", green: "green", blue: "blue"}
+      iex> colorCombiner = Fxnk.Map.combine(fn %{red: red, blue: blue} -> %{purple: red <> blue} end)
+      iex> colorCombiner.(map)
+      %{red: "red", green: "green", blue: "blue", purple: "redblue"}
+  """
+  @spec combine((map() -> map())) :: (map() -> map())
+  def combine(function) do
+    fn map -> combine(map, function) end
+  end
+
+  @doc """
+  Takes a map and a function that accepts a map and returns a map. Runs the map against the function and merges the initial map into the result.
+
+  ## Examples
+      iex> map = %{red: "red", green: "green", blue: "blue"}
+      iex> colorCombiner = Fxnk.Functions.always(%{purple: "purple"})
+      iex> Fxnk.Map.combine(map, colorCombiner)
+      %{red: "red", green: "green", blue: "blue", purple: "purple"}
+  """
+  @spec combine(map(), (map() -> map())) :: map()
+  def combine(map, function) do
+    Map.merge(function.(map), map)
+  end
+
+  @doc """
+  `combine/2` but also accepts a combining function as the last arguments.
+
+  ## Examples
+      iex> map = %{colors: %{red: "red", green: "green", blue: "blue"}}
+      iex> colorCombiner = Fxnk.Functions.always(%{colors: %{red: "fire red", purple: "purple"}})
+      iex> Fxnk.Map.combine_with(map, colorCombiner, &Fxnk.Map.merge_deep_right/2)
+      %{colors: %{red: "fire red", green: "green", blue: "blue", purple: "purple"}}
+  """
+  @spec combine_with(map(), (map() -> map()), (map(), map() -> map())) :: map()
+  def combine_with(map, function, combining_function) do
+    apply(combining_function, [map, function.(map)])
+  end
+
+  @doc """
   Accepts a string `key` and returns a function that takes a `map`. Returns the map's value at `key` or `nil`.
 
   ## Examples
@@ -62,6 +144,46 @@ defmodule Fxnk.Map do
   @spec props(map(), [atom() | binary(), ...]) :: [any(), ...]
   def props(map, keys) when is_list(keys) and is_map(map) do
     for key <- keys, do: prop(map, key)
+  end
+
+  @doc """
+  Curried `prop_equals/3`, takes a value, returns a function that accepts a map and a key.
+
+  ## Examples
+      iex> isFoo = Fxnk.Map.prop_equals("foo")
+      iex> isFoo.(%{foo: "foo"}, :foo)
+      true
+  """
+  @spec prop_equals(any()) :: (map(), atom() | String.t() -> boolean())
+  def prop_equals(value) do
+    fn map, key -> prop_equals(map, key, value) end
+  end
+
+  @doc """
+  Curried `prop_equals/3`, takes a key and a value. Returns a function that accepts a map.
+
+  ## Examples
+      iex> isKeyFoo = Fxnk.Map.prop_equals(:foo, "foo")
+      iex> isKeyFoo.(%{foo: "foo"})
+      true
+  """
+  @spec prop_equals(atom | binary, any) :: (map() -> boolean())
+  def prop_equals(key, value) when is_atom(key) or is_binary(key) do
+    fn map -> prop_equals(map, key, value) end
+  end
+
+  @doc """
+  Accepts a map, key and value. Checks to see if the key on the map is equal to the value.any()
+
+  ## Examples
+    iex> Fxnk.Map.prop_equals(%{foo: "foo"}, :foo, "foo")
+    true
+    iex> Fxnk.Map.prop_equals(%{foo: "bar"}, :foo, "foo")
+    false
+  """
+  @spec prop_equals(map(), atom() | binary(), any()) :: boolean()
+  def prop_equals(map, key, value) when is_map(map) and (is_binary(key) or is_atom(key)) do
+    map[key] === value
   end
 
   @doc """
@@ -135,7 +257,7 @@ defmodule Fxnk.Map do
   end
 
   @doc """
-  Merges two maps together deeply. If both maps have the wame key, the value on the right will be used.
+  Merges two maps together deeply. If both maps have the same key, the value on the right will be used.
   If both keys are a map, the maps will be merged together recursively, preferring values on the right.
 
   ## Example
@@ -168,7 +290,7 @@ defmodule Fxnk.Map do
   end
 
   @doc """
-  Merges two maps together deeply. If both maps have the wame key, the value on the left will be used.
+  Merges two maps together deeply. If both maps have the same key, the value on the left will be used.
   If both keys are a map, the maps will be merged together recursively, preferring values on the left.
 
   ## Example
@@ -180,6 +302,36 @@ defmodule Fxnk.Map do
   @spec merge_deep_left(map(), map()) :: map()
   def merge_deep_left(map1, map2) do
     merge_deep_right(map2, map1)
+  end
+
+  @doc """
+  Rename a key in a map, takes the map, current key and replacement key. Returns the original map with the updated key.
+
+  ## Example
+      iex> Fxnk.Map.rename(%{id: "1234"}, :id, :user_id)
+      %{user_id: "1234"}
+      iex> Fxnk.Map.rename(%{hello: "world", foo: "foo" }, :foo, :bar)
+      %{hello: "world", bar: "foo"}
+  """
+  @spec rename(map(), String.t() | atom(), String.t() | atom()) :: map()
+  def rename(map, key, new_key) do
+    {value, popped_map} = Access.pop(map, key)
+
+    Map.merge(popped_map, %{new_key => value})
+  end
+
+  @doc """
+  Rename multiple keys in a map. Takes the original map and a map where the key is the original key and the value is the replacement key.
+
+  ## Example
+      iex> Fxnk.Map.rename_all(%{user_id: "1234", foo: "foo", bar: "bar"}, %{user_id: :id, bar: :baz})
+      %{id: "1234", foo: "foo", baz: "bar"}
+  """
+  @spec rename_all(map(), map()) :: map()
+  def rename_all(map, renames) do
+    renames
+    |> Map.to_list()
+    |> Enum.reduce(map, fn {old, new}, acc -> rename(acc, old, new) end)
   end
 
   defp do_pick(_, [], acc), do: acc

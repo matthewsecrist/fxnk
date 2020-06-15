@@ -2,9 +2,7 @@
 
 Fxnk is a functional programming library for Elixir inspired by Ramda.
 
-[![Actions Status](https://github.com/matthewsecrist/fxnk/workflows/test/badge.svg)](https://github.com/matthewsecrist/fxnk/actions)
-
-[![Coverage Status](https://coveralls.io/repos/github/matthewsecrist/fxnk/badge.svg?branch=master)](https://coveralls.io/github/matthewsecrist/fxnk?branch=master)
+[![Hex.pm](https://img.shields.io/hexpm/v/fxnk.svg)](https://hex.pm/packages/fxnk) [![Actions Status](https://github.com/matthewsecrist/fxnk/workflows/test/badge.svg)](https://github.com/matthewsecrist/fxnk/actions) [![Coverage Status](https://coveralls.io/repos/github/matthewsecrist/fxnk/badge.svg?branch=master)](https://coveralls.io/github/matthewsecrist/fxnk?branch=master)
 
 It includes functions for flow, lists, logic, maps, and math. Typically, you'd just want to import what you need, such as `import Fxnk.Flow, only: [if_else: 4]`.
 
