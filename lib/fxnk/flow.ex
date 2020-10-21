@@ -109,6 +109,22 @@ defmodule Fxnk.Flow do
   end
 
   @doc """
+  Handle errors gracefully. When an error is encountered, apply a function to that error. When its not an error, do nothing.
+
+  ## Example:
+      iex> make_error = fn message -> {:error, message} end
+      iex> handle_error = fn message -> Atom.to_string(message) end
+      iex> make_error.(:foo) |> Fxnk.Flow.on_error(handle_error)
+      "foo"
+      iex> make_success = fn message -> {:ok, message} end
+      iex> make_success.(:bar) |> Fxnk.Flow.on_error(handle_error)
+      {:ok, :bar}
+  """
+  @spec on_error({:error, any()} | any(), function()) :: any()
+  def on_error({:error, x}, func), do: func.(x)
+  def on_error(x, _), do: x
+
+  @doc """
   Curried `unless_is/3`.
 
   ## Examples

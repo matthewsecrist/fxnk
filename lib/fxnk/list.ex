@@ -12,7 +12,7 @@ defmodule Fxnk.List do
       iex> Fxnk.List.of([])
       [[]]
   """
-  @spec of(any()) :: list(any())
+  @spec of(any()) :: [any(), ...]
   def of(x), do: [x]
 
   @doc """
