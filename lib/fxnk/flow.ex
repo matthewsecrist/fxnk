@@ -6,6 +6,24 @@ defmodule Fxnk.Flow do
   import Fxnk.List, only: [reduce_right: 3]
 
   @doc """
+  `and_then/2` allows you to chain together `{:ok, _}` functions. Stops processing on the first `{:error, _}` and returns the error.
+
+  ## Examples
+      iex> map = %{foo: "foo", bar: "bar", baz: "baz"}
+      iex> uppercase_okay = fn str -> {:ok, String.upcase(str) } end
+      iex> reverse_okay = fn str -> {:ok, String.reverse(str)} end
+      iex> map |> Map.fetch(:foo) |> Fxnk.Flow.and_then(uppercase_okay) |> Fxnk.Flow.and_then(reverse_okay)
+      {:ok, "OOF"}
+      iex> throw_error = fn _ -> {:error, :input_should_not_be_foo} end
+      iex> map |> Map.fetch(:foo) |> Fxnk.Flow.and_then(throw_error) |> Fxnk.Flow.and_then(reverse_okay)
+      {:error, :input_should_not_be_foo}
+
+  """
+  @spec and_then({:error, any} | {:ok, any}, function()) :: any
+  def and_then({:ok, arg}, func), do: func.(arg)
+  def and_then({:error, error}, _), do: {:error, error}
+
+  @doc """
   Curried `compose/2`.
 
   ## Examples

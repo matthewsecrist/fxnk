@@ -80,6 +80,25 @@ defmodule Fxnk.Functions do
   end
 
   @doc """
+  Returns the empty version of whatever is passed in.
+
+  ## Example
+      iex> Fxnk.Functions.empty("hello!")
+      ""
+      iex> Fxnk.Functions.empty(%{foo: "bar"})
+      %{}
+      iex> Fxnk.Functions.empty([1,2,3,4])
+      []
+      iex> Fxnk.Functions.empty({:ok, "x"})
+      {}
+  """
+  @spec empty(list() | map() | binary()) :: <<>> | [] | %{}
+  def empty(x) when is_list(x), do: []
+  def empty(x) when is_map(x), do: %{}
+  def empty(x) when is_binary(x), do: ""
+  def empty(x) when is_tuple(x), do: {}
+
+  @doc """
   A function that always returns false.
   """
   @spec falsy :: false
