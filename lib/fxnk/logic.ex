@@ -174,6 +174,7 @@ defmodule Fxnk.Logic do
       iex> eq_by_math_abs.(5).(-5)
       true
   """
+  @spec equals_by(function()) :: (any -> (any -> boolean))
   def equals_by(func) do
     curry(fn x, y -> equals_by(func, x, y) end)
   end
@@ -185,8 +186,9 @@ defmodule Fxnk.Logic do
       iex> Fxnk.Logic.equals_by(&Kernel.abs/1, 5, -5)
       true
   """
+  @spec equals_by((function() -> any()), any(), any()) :: boolean()
   def equals_by(func, x, y) do
-    equals(func.(x), func.(y))
+    func.(x) == func.(y)
   end
 
   @doc """

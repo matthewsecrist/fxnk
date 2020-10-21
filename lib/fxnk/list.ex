@@ -9,8 +9,10 @@ defmodule Fxnk.List do
   ## Example
       iex> Fxnk.List.of(3)
       [3]
+      iex> Fxnk.List.of([])
+      [[]]
   """
-  @spec of(any()) :: [any()]
+  @spec of(any()) :: list(any())
   def of(x), do: [x]
 
   @doc """
