@@ -4,6 +4,29 @@ defmodule Fxnk.List do
   """
 
   @doc """
+  Returns a list of whatever was passed to it.
+
+  ## Example
+      iex> Fxnk.List.of(3)
+      [3]
+  """
+  @spec of(any()) :: [any()]
+  def of(x), do: [x]
+
+  @doc """
+  Takes a list of maps and a key, returns a list of values in the key over all the maps
+
+  ## Examples
+      iex> list = [%{user_id: "1234"}, %{user_id: "4567"}, %{user_id: "6789"}]
+      iex> Fxnk.List.pluck(list, :user_id)
+      ["1234", "4567", "6789"]
+  """
+  @spec pluck([map(), ...], binary() | atom()) :: [any()]
+  def pluck(list, property) do
+    Enum.map(list, fn map -> Fxnk.Map.prop(map, property) end)
+  end
+
+  @doc """
   `reduce_right/3` takes a list of args, an initial value and a function and returns a single value.
 
   Like reduce, it applies the function to each of the arguments, and accumulating the result, except it does it right to left.
@@ -17,21 +40,6 @@ defmodule Fxnk.List do
     args
     |> Enum.reverse()
     |> Enum.reduce(initial, func)
-  end
-
-  @doc """
-  `zip_map/2` is a lot like `Enum.zip/2`, but instead of returning a list of tuples,
-  it returns a list of maps, where the keys are the second list passed in.
-
-  ## Examples
-      iex> Fxnk.List.zip_map(["hello", "world"], ["first", "second"])
-      [%{"first" => "hello"}, %{"second" => "world"}]
-  """
-  @spec zip_map(list(any), list(any)) :: [%{any() => any()}]
-  def zip_map(list, keys) do
-    keys
-    |> Enum.zip(list)
-    |> Enum.map(fn {k, v} -> %{k => v} end)
   end
 
   @doc """
@@ -63,15 +71,17 @@ defmodule Fxnk.List do
   end
 
   @doc """
-  Takes a list of maps and a key, returns a list of values in the key over all the maps
+  `zip_map/2` is a lot like `Enum.zip/2`, but instead of returning a list of tuples,
+  it returns a list of maps, where the keys are the second list passed in.
 
   ## Examples
-      iex> list = [%{user_id: "1234"}, %{user_id: "4567"}, %{user_id: "6789"}]
-      iex> Fxnk.List.pluck(list, :user_id)
-      ["1234", "4567", "6789"]
+      iex> Fxnk.List.zip_map(["hello", "world"], ["first", "second"])
+      [%{"first" => "hello"}, %{"second" => "world"}]
   """
-  @spec pluck([map(), ...], binary() | atom()) :: [any()]
-  def pluck(list, property) do
-    Enum.map(list, fn map -> Fxnk.Map.prop(map, property) end)
+  @spec zip_map(list(any), list(any)) :: [%{any() => any()}]
+  def zip_map(list, keys) do
+    keys
+    |> Enum.zip(list)
+    |> Enum.map(fn {k, v} -> %{k => v} end)
   end
 end

@@ -139,6 +139,57 @@ defmodule Fxnk.Logic do
   end
 
   @doc """
+  Curried `equals/2`
+
+  ## Example
+      iex> eq_three = Fxnk.Logic.equals(3)
+      iex> eq_three.(3)
+      true
+      iex> eq_three.(4)
+      false
+  """
+  @spec equals(any) :: (any -> boolean)
+  def equals(x) do
+    fn y -> equals(x, y) end
+  end
+
+  @doc """
+  Returns true if the two values passed to it are the same, false otherwise.
+
+  ## Example
+      iex> Fxnk.Logic.equals(%{foo: "foo"}, %{foo: "foo"})
+      true
+      iex> Fxnk.Logic.equals(%{foo: "foo"}, %{bar: "bar"})
+      false
+  """
+  @spec equals(any(), any()) :: boolean()
+  def equals(x, x), do: true
+  def equals(_, _), do: false
+
+  @doc """
+  Curried `equals_by/3`
+
+  ## Example
+      iex> eq_by_math_abs = Fxnk.Logic.equals_by(&Kernel.abs/1)
+      iex> eq_by_math_abs.(5).(-5)
+      true
+  """
+  def equals_by(func) do
+    curry(fn x, y -> equals_by(func, x, y) end)
+  end
+
+  @doc """
+  Takes a function and applies the function to both arguments, returning if they are equal.
+
+  ## Example
+      iex> Fxnk.Logic.equals_by(&Kernel.abs/1, 5, -5)
+      true
+  """
+  def equals_by(func, x, y) do
+    equals(func.(x), func.(y))
+  end
+
+  @doc """
   `is_empty/1` returns true if passed an empty `Map` or `List`.
 
   ## Examples
@@ -203,7 +254,7 @@ defmodule Fxnk.Logic do
       iex> Fxnk.Logic.or?(false, false)
       false
   """
-  @spec or?(any, any) :: boolean
+  @spec or?(boolean(), boolean()) :: boolean()
   def or?(true, _), do: true
   def or?(_, true), do: true
   def or?(_, _), do: false
