@@ -6,6 +6,24 @@ defmodule Fxnk.Flow do
   import Fxnk.List, only: [reduce_right: 3]
 
   @doc """
+  `and_then/2` allows you to chain together `{:ok, _}` functions. Stops processing on the first `{:error, _}` and returns the error.
+
+  ## Examples
+      iex> map = %{foo: "foo", bar: "bar", baz: "baz"}
+      iex> uppercase_okay = fn str -> {:ok, String.upcase(str) } end
+      iex> reverse_okay = fn str -> {:ok, String.reverse(str)} end
+      iex> map |> Map.fetch(:foo) |> Fxnk.Flow.and_then(uppercase_okay) |> Fxnk.Flow.and_then(reverse_okay)
+      {:ok, "OOF"}
+      iex> throw_error = fn _ -> {:error, :input_should_not_be_foo} end
+      iex> map |> Map.fetch(:foo) |> Fxnk.Flow.and_then(throw_error) |> Fxnk.Flow.and_then(reverse_okay)
+      {:error, :input_should_not_be_foo}
+
+  """
+  @spec and_then({:error, any} | {:ok, any}, function()) :: any
+  def and_then({:ok, arg}, func), do: func.(arg)
+  def and_then({:error, error}, _), do: {:error, error}
+
+  @doc """
   Curried `compose/2`.
 
   ## Examples
@@ -89,6 +107,22 @@ defmodule Fxnk.Flow do
   def pipe(arg, fns) when is_list(fns) do
     Enum.reduce(fns, arg, fn f, acc -> f.(acc) end)
   end
+
+  @doc """
+  Handle errors gracefully. When an error is encountered, apply a function to that error. When its not an error, do nothing.
+
+  ## Example:
+      iex> make_error = fn message -> {:error, message} end
+      iex> handle_error = fn message -> Atom.to_string(message) end
+      iex> make_error.(:foo) |> Fxnk.Flow.on_error(handle_error)
+      "foo"
+      iex> make_success = fn message -> {:ok, message} end
+      iex> make_success.(:bar) |> Fxnk.Flow.on_error(handle_error)
+      {:ok, :bar}
+  """
+  @spec on_error({:error, any()} | any(), function()) :: any()
+  def on_error({:error, x}, func), do: func.(x)
+  def on_error(x, _), do: x
 
   @doc """
   Curried `unless_is/3`.

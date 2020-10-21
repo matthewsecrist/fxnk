@@ -87,6 +87,40 @@ defmodule Fxnk.Map do
   end
 
   @doc """
+  Return a specific element in a nested map. If the path does not exist, returns the orignal map.
+
+  ## Examples
+      iex> map = %{one: %{two: %{three: "three" }}}
+      iex> Fxnk.Map.path(map, [:one, :two, :three])
+      "three"
+      iex> Fxnk.Map.path(map, [:one, :two])
+      %{three: "three"}
+      iex> Fxnk.Map.path(map, [:one, :four])
+      %{one: %{two: %{three: "three" }}}
+  """
+  @spec path(map(), [binary() | atom()]) :: map() | any()
+  def path(map, path_array) do
+    do_path(map, path_array, map)
+  end
+
+  @doc """
+  Like `path/2`, but returns the `or_value` when the path is not found.
+
+  ## Examples
+      iex> map = %{one: %{two: %{three: "three" }}}
+      iex> Fxnk.Map.path_or(map, [:one, :two, :three], :foo)
+      "three"
+      iex> Fxnk.Map.path_or(map, [:one, :two], :foo)
+      %{three: "three"}
+      iex> Fxnk.Map.path_or(map, [:one, :four], :foo)
+      :foo
+  """
+  @spec path_or(map(), [binary() | atom()], any()) :: map() | any()
+  def path_or(map, path_array, or_value) do
+    do_path_or(map, path_array, or_value)
+  end
+
+  @doc """
   Accepts a string `key` and returns a function that takes a `map`. Returns the map's value at `key` or `nil`.
 
   ## Examples
@@ -342,4 +376,12 @@ defmodule Fxnk.Map do
       _ -> do_pick(map, tl, acc)
     end
   end
+
+  defp do_path(map, _, nil), do: map
+  defp do_path(_, [], acc), do: acc
+  defp do_path(map, [hd | tl], acc), do: do_path(map, tl, prop(acc, hd))
+
+  defp do_path_or(nil, _, default_to), do: default_to
+  defp do_path_or(map, [], _), do: map
+  defp do_path_or(map, [hd | tl], default_to), do: do_path_or(prop(map, hd), tl, default_to)
 end
